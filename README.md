@@ -1,39 +1,54 @@
-npm i @chakra-ui/react @emotion/react next-themes
+# 🚀 Este projeto utiliza o **Next.js (App Router)** integrado ao **Chakra UI v3** e **next-themes**, configurado para oferecer uma interface moderna, responsiva e com suporte nativo a Dark Mode (Tema Escuro/Claro).
 
+## 🛠️ Tecnologias Utilizadas
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+* **Next.js** (Framework React com App Router)
+* **Chakra UI v3** (Sistema de Design e Componentes)
+* **Next Themes** (Gerenciamento de Tema Dinâmico)
+* **TypeScript** (Tipagem Estática e Segurança de Código)
 
-## Getting Started
+## 📋 Pré-requisitos
 
-First, run the development server:
+Antes de começar, certifique-se de ter o [Node.js](https://nodejs.org/) instalado em sua máquina (recomenda-se versão 18 ou superior).
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🔧 Instalação e Execução
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Siga os passos abaixo para configurar o ambiente de desenvolvimento:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1.  **Clone o repositório:**
+    ```bash
+    git clone [https://github.com/seu-usuario/seu-repositorio.git](https://github.com/seu-usuario/seu-repositorio.git)
+    ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2.  **Acesse a pasta do projeto:**
+    ```bash
+    cd seu-repositorio
+    ```
 
-## Learn More
+3.  **Instale as dependências básicas:**
+    ```bash
+    npm install
+    ```
 
-To learn more about Next.js, take a look at the following resources:
+4.  **Instale as bibliotecas do Chakra UI e Gerenciamento de Tema:**
+    ```bash
+    npm i @chakra-ui/react @emotion/react next-themes
+    ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+5.  **Inicie o servidor de desenvolvimento:**
+    ```bash
+    npm run dev
+    ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🌑 Funcionalidades de Tema
 
-## Deploy on Vercel
+A aplicação utiliza um **Provider Global** que combina o `ChakraProvider` com o `ThemeProvider` do `next-themes`. Isso garante:
+* Detecção automática do tema do sistema operacional.
+* Troca de temas sem "flicker" (piscar de cores) durante o carregamento.
+* Persistência da escolha do usuário no navegador.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📁 Estrutura do Projeto
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+* `src/app/`: Contém as rotas, layouts e páginas.
+* `src/components/`: Componentes de UI reutilizáveis.
+* `src/theme/`: Definições de cores, fontes e customizações do Chakra.
