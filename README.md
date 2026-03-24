@@ -1,4 +1,6 @@
-# 🚀 Este projeto utiliza o **Next.js (App Router)** integrado ao **Chakra UI v3** e **next-themes**, configurado para oferecer uma interface moderna, responsiva e com suporte nativo a Dark Mode (Tema Escuro/Claro).
+# 🚀 Front
+
+Este projeto utiliza o **Next.js (App Router)** integrado ao **Chakra UI v3** e **next-themes**, configurado para oferecer uma interface moderna, responsiva e com suporte nativo a Dark Mode (Tema Escuro/Claro).
 
 ## 🛠️ Tecnologias Utilizadas
 
