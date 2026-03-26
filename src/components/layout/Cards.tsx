@@ -1,41 +1,69 @@
 "use client";
 
-import { Button, Card, Image, Text } from "@chakra-ui/react"
-import { useRouter } from "next/navigation";
+import { Card, Text, Icon, VStack, Box } from "@chakra-ui/react";
+// Importe um ícone se desejar (ex: Luccide ou React Icons)
+// import { FiArrowRight } from "react-icons/fi"; 
 
-type LanguageCardProps = {
-    title: string;
-    description: string;
-};
+interface GenericCardProps {
+  title: string;
+  description?: string;
+  onClick: () => void;
+}
 
-export function Cards({ title, description }: LanguageCardProps) {
-    return (
-        <Card.Root
-            width={{ base: "85vw", md: "200px" }}
-            minH={{ base: "50px", md: "300px" }}
-            overflow="hidden"
-            bg="brand.600"
-            color="brand.white"
-            py="10"
-            _hover={{ bg: "brand.white", color: "brand.600", cursor: "pointer" }}
-            transition="all 0.3s ease-in-out"
-        >
-            {/* <Image
-                src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-                alt="Green double couch with wooden legs"
-            /> */}
-            <Card.Body
-                display="flex"
-                flexDirection="column"
-                justifyContent="center"
-                alignItems="center"
-                textAlign="center"
-                gap="4"
-            >
-                <Card.Title alt={description} fontSize={{ base: "lg", md: "2xl" }}>
-                    {title}
-                </Card.Title>
-            </Card.Body>
-        </Card.Root>
-    )
+export function Cards({ title, description, onClick }: GenericCardProps) {
+  return (
+    <Card.Root
+      onClick={onClick}
+      width={{ base: "90vw", md: "240px" }}
+      minH={{ base: "80px", md: "260px" }}
+      overflow="hidden"
+      bg="brand.600"
+      color="white"
+      borderRadius="2xl"
+      border="1px solid"
+      borderColor="whiteAlpha.200"
+      position="relative"
+      role="group"
+      transition="all 0.4s cubic-bezier(.17,.67,.83,.67)"
+      _hover={{ 
+        transform: "translateY(-8px)",
+        shadow: "2xl", 
+        bg: "brand.610",
+        cursor: "pointer",
+        borderColor: "brand.300",
+        color: "brand.500"
+      }}
+    >
+      <Card.Body
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+        textAlign="center"
+        p="6"
+      >
+        <VStack gap="4">
+          {/* Elemento Decorativo: Um círculo sutil no fundo */}
+          <Box
+            position="absolute"
+            top="-10%"
+            right="-10%"
+            bg="whiteAlpha.100"
+            w="100px"
+            h="100px"
+            borderRadius="full"
+          />
+
+          <Card.Title
+            fontSize={{ base: "xl", md: "2xl" }}
+            fontWeight="bold"
+            letterSpacing="tight"
+            _groupHover={{ color: "brand.200" }} // Muda cor do título no hover
+          >
+            {title}
+          </Card.Title> 
+        </VStack>
+      </Card.Body>
+    </Card.Root>
+  );
 }

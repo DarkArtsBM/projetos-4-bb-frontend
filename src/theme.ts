@@ -22,12 +22,11 @@ const config = defineConfig({
         brand: {
 
           white:{ value: "#ffffff" },
-
-          // Cor principal da marca
+          100: {value: "gray.50"},
           500: { value: "#FDE100" },
 
-          // Uma variação mais escura da cor principal
           600: { value: "#003882" },
+          610: { value: "#094da5" }
         },
       },
     },
