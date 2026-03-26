@@ -101,15 +101,17 @@ export default function MediaPage() {
                 </Box>
 
                 <SimpleGrid columns={{ base: 1, md: 1 }} gap={4} w="full">
-                  {currentContent.audios.map((audio: any, index: number) => (
-                    <AudioCard
-                      key={index}
-                      nome={audio.nome}
-                      url={audio.url}
-                      initialLikes={audio.likes || 0}
-                      initialDislikes={audio.dislikes || 0}
-                    />
-                  ))}
+                  {currentContent.audios.map(
+                    (audio: AudioItem, index: number) => (
+                      <AudioCard
+                        key={index}
+                        nome={audio.nome}
+                        url={audio.url}
+                        initialLikes={audio.likes || 0}
+                        initialDislikes={audio.dislikes || 0}
+                      />
+                    ),
+                  )}
                 </SimpleGrid>
               </VStack>
             )}
