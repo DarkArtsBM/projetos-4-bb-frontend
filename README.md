@@ -36,8 +36,11 @@ Siga os passos abaixo para configurar o ambiente de desenvolvimento:
     ```bash
     npm i @chakra-ui/react @emotion/react next-themes
     ```
-
-5.  **Inicie o servidor de desenvolvimento:**
+5.  **Instale as bibliotecas do react-icons**
+    ```bash
+    npm install react-icons
+    ```
+6.  **Inicie o servidor de desenvolvimento:**
     ```bash
     npm run dev
     ```
