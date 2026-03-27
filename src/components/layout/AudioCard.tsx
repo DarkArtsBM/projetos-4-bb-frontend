@@ -5,17 +5,17 @@ import { Box, Text, HStack, IconButton, VStack, Flex } from "@chakra-ui/react";
 import { FiThumbsUp } from "react-icons/fi";
 
 interface AudioCardProps {
-  audioId: number; // Precisamos do ID real que vem do banco!
+  audioId: number; // Precisamos do ID real
   nomeAutor: string;
   caminhoArquivo: string; // O caminho que o Java devolveu (ex: /uploads/audios/123.webm)
   votosIniciais: number;
 }
 
 export function AudioCard({ audioId, nomeAutor, caminhoArquivo, votosIniciais }: AudioCardProps) {
-  // Agora o estado guarda o número real de votos
+  // estado guarda o número real de votos
   const [votos, setVotos] = useState(votosIniciais);
 
-  // Uma travinha simples para o usuário não clicar 50 vezes seguidas
+  //  trava simples para votos
   const [jaVotou, setJaVotou] = useState(false);
   const [carregando, setCarregando] = useState(false);
 
@@ -23,8 +23,8 @@ export function AudioCard({ audioId, nomeAutor, caminhoArquivo, votosIniciais }:
     if (jaVotou) return; // Se já votou, ignora o clique
     setCarregando(true);
 
-    // Na vida real, você pega isso do seu Contexto de Autenticação ou LocalStorage
-    // Cole aqui aquele token gigante gerado no Postman para testar!
+
+    //  token gerado no Postman
     const meuTokenJWT = "COLE_SEU_TOKEN_AQUI";
 
     try {
@@ -38,7 +38,6 @@ export function AudioCard({ audioId, nomeAutor, caminhoArquivo, votosIniciais }:
 
       if (resposta.ok) {
         const dadosAtualizados = await resposta.json();
-        // Atualiza a tela com o número REAL que veio do banco de dados!
         setVotos(dadosAtualizados.votos);
         setJaVotou(true);
       } else if (resposta.status === 403 || resposta.status === 401) {
