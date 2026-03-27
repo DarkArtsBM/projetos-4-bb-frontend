@@ -16,7 +16,7 @@ import {
 import { useSelectionStore } from "@/store/useSelectionStore";
 import { BANCO_MOCK, AudioItem } from "@/data/content";
 import { AudioCard } from "@/components/layout/AudioCard";
-import  {GravadorAudio} from "@/components/layout/GravadorAudio";
+import  {GravadorAudio} from "@/components/features/GravadorAudio";
 
 export default function MediaPage() {
   // 1. Extraindo estados e funções do Zustand (Padrão Inglês)
