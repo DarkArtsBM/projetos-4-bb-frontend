@@ -13,6 +13,10 @@ const config = defineConfig({
     // tokens são variáveis de design (design tokens).
     // Eles representam valores reutilizáveis como cores, espaçamentos, fontes etc.
     tokens: {
+      fonts: {
+        heading: { value: "var(--font-frank), serif" },
+        body: { value: "var(--font-frank), serif" },
+      },
 
       // Definimos cores personalizadas para o projeto.
       colors: {

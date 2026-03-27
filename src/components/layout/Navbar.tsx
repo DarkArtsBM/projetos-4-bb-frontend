@@ -26,7 +26,9 @@ export const Navbar = () => {
                 </Link>
 
                 {/* Botão de Ação / Login */}
+
                 <HStack>
+                    <Link href="/login" style={{ textDecoration: 'none' }}>
                     <Button
                         colorScheme="blue"
                         size="sm"
@@ -39,7 +41,7 @@ export const Navbar = () => {
                         >
                         Entrar
                     </Button>
-                    {/* Aqui você poderia colocar um ícone de menu hambúrguer para mobile futuramente */}
+                        </Link>
                 </HStack>
             </Flex>
         </Box>

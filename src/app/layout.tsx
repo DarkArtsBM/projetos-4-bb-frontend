@@ -10,6 +10,12 @@ import { Provider } from "@/components/ui/provider";
 import "./globals.css";
 
 import { Navbar } from "@/components/layout/Navbar";
+import { Frank_Ruhl_Libre } from "next/font/google";
+
+const frank = Frank_Ruhl_Libre({
+    subsets: ["latin"],
+    variable: "--font-frank", // Isso cria uma variável CSS amigável
+});
 
 
 // Metadata é usada pelo Next.js para configurar informações da página.
@@ -28,13 +34,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
     // Define o idioma do documento HTML
     // pt-BR ajuda em SEO e acessibilidade
-    <html lang="pt-BR" suppressHydrationWarning>
+    <html lang="pt-BR" suppressHydrationWarning className={frank.variable}>
 
       <body>
-
-        {/* Aqui envolvemos toda a aplicação com nosso Provider */}
-
-        {/* Isso garante que Chakra UI e o sistema de tema estejam disponíveis em qualquer componente */}
 
         <Provider>
           <Navbar />
