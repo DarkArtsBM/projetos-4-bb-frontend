@@ -1,68 +1,86 @@
 "use client";
 
 import { useState } from "react";
-import { Box, Text, HStack, IconButton, VStack, Flex, Badge } from "@chakra-ui/react";
-import { FiThumbsUp, FiThumbsDown } from "react-icons/fi";
+import { Box, Text, HStack, IconButton, VStack, Flex } from "@chakra-ui/react";
+import { FiThumbsUp } from "react-icons/fi";
 
 interface AudioCardProps {
-  nome: string;
-  url: string;
-  initialLikes: number;
-  initialDislikes: number;
+  audioId: number; // Precisamos do ID real que vem do banco!
+  nomeAutor: string;
+  caminhoArquivo: string; // O caminho que o Java devolveu (ex: /uploads/audios/123.webm)
+  votosIniciais: number;
 }
 
-export function AudioCard({ nome, url, initialLikes, initialDislikes }: AudioCardProps) {
-  const [userVote, setUserVote] = useState<"like" | "dislike" | null>(null);
+export function AudioCard({ audioId, nomeAutor, caminhoArquivo, votosIniciais }: AudioCardProps) {
+  // Agora o estado guarda o número real de votos
+  const [votos, setVotos] = useState(votosIniciais);
 
-  const handleVote = (vote: "like" | "dislike") => {
-    setUserVote((prev) => (prev === vote ? null : vote));
+  // Uma travinha simples para o usuário não clicar 50 vezes seguidas
+  const [jaVotou, setJaVotou] = useState(false);
+  const [carregando, setCarregando] = useState(false);
+
+  const handleUpvote = async () => {
+    if (jaVotou) return; // Se já votou, ignora o clique
+    setCarregando(true);
+
+    // Na vida real, você pega isso do seu Contexto de Autenticação ou LocalStorage
+    // Cole aqui aquele token gigante gerado no Postman para testar!
+    const meuTokenJWT = "COLE_SEU_TOKEN_AQUI";
+
+    try {
+      const resposta = await fetch(`http://localhost:8080/api/tutoriais/audios/${audioId}/upvote`, {
+        method: "PATCH",
+        headers: {
+          "Authorization": `Bearer ${meuTokenJWT}`,
+          "Content-Type": "application/json"
+        }
+      });
+
+      if (resposta.ok) {
+        const dadosAtualizados = await resposta.json();
+        // Atualiza a tela com o número REAL que veio do banco de dados!
+        setVotos(dadosAtualizados.votos);
+        setJaVotou(true);
+      } else if (resposta.status === 403 || resposta.status === 401) {
+        alert("Você precisa fazer login para votar!");
+      }
+    } catch (erro) {
+      console.error("Erro ao votar:", erro);
+    } finally {
+      setCarregando(false);
+    }
   };
 
-  // Lógica para exibir o total "fingindo" que salvou no banco
-  const displayLikes = initialLikes + (userVote === "like" ? 1 : 0);
-  const displayDislikes = initialDislikes + (userVote === "dislike" ? 1 : 0);
+  // Monta a URL completa para o player de áudio achar o arquivo no Java
+  const urlCompletaDoAudio = `http://localhost:8080${caminhoArquivo}`;
 
   return (
-    <Box p={4} borderRadius="xl" border="1px solid" borderColor="gray.200" bg="white" w="full">
-      <VStack align="start" gap={3}>
-        <Flex w="full" justify="space-between" align="center">
-          <Text fontWeight="bold" fontSize="sm" color="blue.800">{nome}</Text>
+      <Box p={4} borderRadius="xl" border="1px solid" borderColor="gray.200" bg="white" w="full">
+        <VStack align="start" gap={3}>
+          <Flex w="full" justify="space-between" align="center">
+            <Text fontWeight="bold" fontSize="sm" color="blue.800">{nomeAutor}</Text>
 
-          <HStack gap={4}>
             {/* Seção Like */}
             <HStack gap={1}>
-              <Text fontSize="xs" fontWeight="bold" color="green.600">{displayLikes}</Text>
+              <Text fontSize="xs" fontWeight="bold" color={jaVotou ? "green.600" : "gray.600"}>
+                {votos}
+              </Text>
               <IconButton
-                aria-label="Like"
-                variant={userVote === "like" ? "solid" : "outline"}
-                colorPalette="green"
-                onClick={() => handleVote("like")}
-                rounded="full"
-                size="xs"
+                  aria-label="Upvote"
+                  variant={jaVotou ? "solid" : "outline"}
+                  colorPalette="green"
+                  onClick={handleUpvote}
+                  disabled={jaVotou || carregando} // Desabilita enquanto carrega ou se já votou
+                  rounded="full"
+                  size="xs"
               >
                 <FiThumbsUp />
               </IconButton>
             </HStack>
+          </Flex>
 
-            {/* Seção Dislike */}
-            <HStack gap={1}>
-              <Text fontSize="xs" fontWeight="bold" color="red.600">{displayDislikes}</Text>
-              <IconButton
-                aria-label="Dislike"
-                variant={userVote === "dislike" ? "solid" : "outline"}
-                colorPalette="red"
-                onClick={() => handleVote("dislike")}
-                rounded="full"
-                size="xs"
-              >
-                <FiThumbsDown />
-              </IconButton>
-            </HStack>
-          </HStack>
-        </Flex>
-
-        <audio controls src={url} style={{ width: "100%" }} />
-      </VStack>
-    </Box>
+          <audio controls src={urlCompletaDoAudio} style={{ width: "100%" }} />
+        </VStack>
+      </Box>
   );
 }
