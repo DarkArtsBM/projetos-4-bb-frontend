@@ -103,8 +103,8 @@ export default function MediaPage() {
                     <Text color="gray.700">{currentContent.descricao}</Text>
                   </Box>
 
-                  {/* 2. O NOSSO GRAVADOR ENTRA AQUI! 🚀 */}
-                  {/* Estamos passando tutorialId={1} fixo por enquanto para o Java saber onde salvar */}
+                  {/* 2.  GRAVADOR */}
+
                   <Box w="full" mt={2} mb={4}>
                     <GravadorAudio tutorialId={1} />
                   </Box>
@@ -119,7 +119,6 @@ export default function MediaPage() {
                         (audio: any, index: number) => (
                             <AudioCard
                                 key={index}
-                                // Como estamos usando o MOCK, improvisamos os dados para encaixar no novo formato do Card
                                 audioId={index + 1}
                                 nomeAutor={audio.nome || "Usuário Anônimo"}
                                 caminhoArquivo={audio.url}
