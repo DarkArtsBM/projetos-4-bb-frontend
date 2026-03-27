@@ -92,6 +92,7 @@ export default function MediaPage() {
             </Box>
 
             {/* DESCRIÇÃO, GRAVADOR E ÁUDIOS */}
+
             {currentContent && (
                 <VStack align="start" w="full" gap={6}>
 
