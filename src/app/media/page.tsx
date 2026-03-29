@@ -16,6 +16,7 @@ import {
 import { useSelectionStore } from "@/store/useSelectionStore";
 import { BANCO_MOCK, AudioItem } from "@/data/content";
 import { AudioCard } from "@/components/layout/AudioCard";
+import  {GravadorAudio} from "@/components/features/GravadorAudio";
 
 export default function MediaPage() {
   // 1. Extraindo estados e funções do Zustand (Padrão Inglês)
@@ -90,30 +91,45 @@ export default function MediaPage() {
               {selectProcess || "Selecione um processo"}
             </Box>
 
-            {/* DESCRIÇÃO E ÁUDIOS */}
-            {currentContent && (
-              <VStack align="start" w="full" gap={6}>
-                <Box p={4} bg="gray.50" borderRadius="lg" w="full">
-                  <Text fontWeight="bold" mb={2}>
-                    Sobre este processo:
-                  </Text>
-                  <Text color="gray.700">{currentContent.descricao}</Text>
-                </Box>
+            {/* DESCRIÇÃO, GRAVADOR E ÁUDIOS */}
 
-                <SimpleGrid columns={{ base: 1, md: 1 }} gap={4} w="full">
-                  {currentContent.audios.map(
-                    (audio: AudioItem, index: number) => (
-                      <AudioCard
-                        key={index}
-                        nome={audio.nome}
-                        url={audio.url}
-                        initialLikes={audio.likes || 0}
-                        initialDislikes={audio.dislikes || 0}
-                      />
-                    ),
-                  )}
-                </SimpleGrid>
-              </VStack>
+            {currentContent && (
+                <VStack align="start" w="full" gap={6}>
+
+                  {/* 1. CAIXA DE DESCRIÇÃO */}
+                  <Box p={4} bg="gray.50" borderRadius="lg" w="full">
+                    <Text fontWeight="bold" mb={2}>
+                      Sobre este processo:
+                    </Text>
+                    <Text color="gray.700">{currentContent.descricao}</Text>
+                  </Box>
+
+                  {/* 2.  GRAVADOR */}
+
+                  <Box w="full" mt={2} mb={4}>
+                    <GravadorAudio tutorialId={1} />
+                  </Box>
+
+                  <Text fontWeight="bold" fontSize="lg" color="gray.700">
+                    Explicações da Comunidade:
+                  </Text>
+
+                  {/* 3. LISTA DE ÁUDIOS (Adaptada para o novo AudioCard) */}
+                  <SimpleGrid columns={{ base: 1, md: 1 }} gap={4} w="full">
+                    {currentContent.audios.map(
+                        (audio: any, index: number) => (
+                            <AudioCard
+                                key={index}
+                                audioId={index + 1}
+                                nomeAutor={audio.nome || "Usuário Anônimo"}
+                                caminhoArquivo={audio.url}
+                                votosIniciais={audio.likes || 0}
+                            />
+                        ),
+                    )}
+                  </SimpleGrid>
+
+                </VStack>
             )}
           </VStack>
         </Box>
