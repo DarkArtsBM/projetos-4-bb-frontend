@@ -1,4 +1,3 @@
-// src/features/home/HomeView.tsx
 "use client";
 
 import {
