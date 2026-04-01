@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/password-input"
 import { useState } from "react";
 import {useRouter} from "next/navigation";
+import { api } from "@/lib/api";
 
 
 export function LoginForm() {
@@ -31,35 +32,25 @@ export function LoginForm() {
 
 
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
-            const response = await fetch(`${apiUrl}/usuarios/login`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ email, senha }),
+            const data = await api.post<{ token: string }>("/usuarios/login", {
+                email,
+                senha,
             });
 
-            if (response.ok) {
-                const data = await response.json();
-                localStorage.setItem("token", data.token);
-                toaster.create({
-                    title: "Sucesso!",
-                    description: "Login realizado com sucesso.",
-                    type: "success",
-                });
-                router.push("/media");
-            } else {
-                toaster.create({
-                    title: "Erro no Login",
-                    description: "E-mail ou senha inválidos.",
-                    type: "error",
-                });
-            }
-        } catch (error) {
+            localStorage.setItem("token", data.token);
+
             toaster.create({
-                title: "Erro de Conexão",
-                description: "Não foi possível conectar ao servidor.",
+                title: "Bem-vindo!",
+                description: "Login realizado com sucesso.",
+                type: "success",
+            });
+
+            router.push("/");
+        } catch (error: any) {
+            // 3. O erro cai aqui automaticamente se o status não for 2xx
+            toaster.create({
+                title: "Erro no login",
+                description: "E-mail ou senha incorretos.",
                 type: "error",
             });
         } finally {
@@ -137,6 +128,7 @@ export function LoginForm() {
                             fontWeight="bold"
                             cursor="pointer"
                             _hover={{ textDecoration: "underline" }}
+                            onClick={() => router.push("/cadastro")}
                         >
                             Cadastre-se aqui
                         </Text>

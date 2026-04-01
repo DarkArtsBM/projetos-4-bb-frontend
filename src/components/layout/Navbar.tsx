@@ -54,6 +54,18 @@ export const Navbar = () => {
                             Entrar
                         </Button>
                     </Link>
+                    <Link href="/cadastro" style={{ textDecoration: 'none' }}>
+                        <Button
+                            size={{ base: "xs", md: "sm" }}
+                            variant="outline"
+                            color="brand.600"
+                            bg="white"
+                            _hover={{ bg: "blue.50" }}
+                            fontWeight="bold"
+                        >
+                            Cadastre-se
+                        </Button>
+                    </Link>
 
                 </HStack>
             </Flex>
