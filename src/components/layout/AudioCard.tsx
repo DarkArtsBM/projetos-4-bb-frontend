@@ -38,7 +38,7 @@ export function AudioCard({ audioId, nomeAutor, caminhoArquivo, votosIniciais }:
     try {
       // 1. TENTA CONEXÃO REAL COM O BACK-END
       const dadosAtualizados = await api.patch<{ votos: number }>(
-          `/tutoriais/audios/${audioId}/upvote`,
+          `/audios/${audioId}/upvote`,
           {}
       );
 

@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { api } from "@/lib/api";
+import {toaster} from "@/components/ui/toaster";
 
 export function useAudioRecorder(tutorialId: number, idioma: string | null) {
     const [gravando, setGravando] = useState(false);
@@ -29,7 +30,7 @@ export function useAudioRecorder(tutorialId: number, idioma: string | null) {
             recorder.start();
             setGravando(true);
         } catch (erro) {
-            alert("Precisamos de permissão para usar o microfone!");
+            toaster.create({ title: "Microfone bloqueado", description: "Permita o uso do microfone para gravar.", type: "error" });
         }
     };
 
@@ -47,7 +48,7 @@ export function useAudioRecorder(tutorialId: number, idioma: string | null) {
 
         // Trava de segurança
         if (!idioma) {
-            alert("Selecione um idioma antes de gravar!");
+            toaster.create({ title: "Atenção", description: "Selecione um idioma antes de gravar!", type: "warning" });
             return;
         }
 
@@ -64,7 +65,7 @@ export function useAudioRecorder(tutorialId: number, idioma: string | null) {
             const resposta = await api.post(`/audio/${tutorialId}`, formData);
 
             if (resposta) {
-                alert("Áudio enviado com sucesso!");
+                toaster.create({ title: "Sucesso!", description: "Sua explicação ajudará outras pessoas.", type: "success" });
                 setAudioBlob(null); // Limpa o áudio da tela
             }
         } catch (erro) {
