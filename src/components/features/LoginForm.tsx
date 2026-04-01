@@ -83,9 +83,16 @@ export function LoginForm() {
                     Entrar
                 </Button>
                 <Text fontSize="sm" color="gray.600">
-                    Não tem uma conta?{" "}
-                    <Text as="span" color="brand.600" fontWeight="bold" cursor="pointer" _hover={{ textDecoration: "underline" }}>
-                        Cadastre-se aqui
+                    Não tem uma conta??{" "}
+                      <Text 
+                        as="span" 
+                        color="brand.600" 
+                        fontWeight="bold" 
+                        cursor="pointer" 
+                        _hover={{ textDecoration: "underline" }}
+                        onClick={() => router.push("/cadastro")}
+                    >
+                    Criar
                     </Text>
                 </Text>
             </VStack>
