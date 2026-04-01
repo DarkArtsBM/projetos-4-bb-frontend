@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useSelectionStore } from "@/store/useSelectionStore";
 import { api } from "@/lib/api";
 
-// Reutilizamos a tipagem aqui
+
 interface AudioResponseDTO {
     id: number;
     caminhoArquivo: string;
@@ -12,7 +12,8 @@ interface AudioResponseDTO {
     idioma: string;
 }
 
-// Passamos o MVP_CONFIG para cá (ou importe de um arquivo de constantes)
+// MOCKS PARA DEMOSTRAR O FRONT -------------------------------------------------
+
 const MVP_CONFIG = {
     idiomas: ["Português", "Kayapó", "Tukano"],
     processos: {
@@ -21,6 +22,36 @@ const MVP_CONFIG = {
         "Senha": { id: 3, videoUrl: "https://www.youtube.com/embed/F-wOvzPQ2DM/", descricao: "Passo a passo para recuperação de senhas." },
     }
 };
+
+const AUDIOS_MOCK: AudioResponseDTO[] = [
+    {
+        id: 101,
+        caminhoArquivo: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+        votos: 15,
+        idioma: "Kayapó",
+        tutorialId: 1,
+        dataCriacao: "2023-10-01"
+    },
+    {
+        id: 102,
+        caminhoArquivo: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+        votos: 8,
+        idioma: "Tukano",
+        tutorialId: 1,
+        dataCriacao: "2023-10-02"
+    },
+    {
+        id: 103,
+        caminhoArquivo: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+        votos: 22,
+        idioma: "Português",
+        tutorialId: 2,
+        dataCriacao: "2023-10-03"
+    }
+];
+
+
+// -----------------------------------------------------------------------
 
 export function useMediaView() {
     const { selectedLanguage, selectProcess, setLanguage, setProcess } = useSelectionStore();
@@ -37,9 +68,18 @@ export function useMediaView() {
             setCarregandoAudios(true);
             try {
                 const dados = await api.get<AudioResponseDTO[]>(`/audio/${conteudoAtual.id}?idioma=${selectedLanguage}`);
-                setAudiosComunidade(dados || []);
+
+
+                setAudiosComunidade(dados && dados.length > 0 ? dados : AUDIOS_MOCK.filter(a => a.idioma === selectedLanguage));
+
             } catch (erro) {
-                console.error("Erro ao buscar áudios:", erro);
+
+                // FILTRO MOCK: Mostra apenas os áudios do idioma selecionado
+                console.warn("Back-end offline. Mostrando áudios de teste.");
+                const filtrados = AUDIOS_MOCK.filter(a => a.idioma === selectedLanguage);
+                setAudiosComunidade(filtrados);
+
+                //-----------------------------------------------------
             } finally {
                 setCarregandoAudios(false);
             }

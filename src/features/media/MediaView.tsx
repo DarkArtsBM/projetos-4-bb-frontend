@@ -4,10 +4,9 @@ import { Box, Container, Flex, Text, AspectRatio, VStack, SimpleGrid, Spinner, C
 import { NativeSelect } from "@chakra-ui/react"
 import { AudioCard } from "@/components/layout/AudioCard";
 import { GravadorAudio } from "@/features/media/components/GravadorAudio";
-import { useMediaView } from "@/features/media/hooks/useMediaView"; // Importamos o Hook
+import { useMediaView } from "@/features/media/hooks/useMediaView";
 
 export function MediaView() {
-    // Puxamos toda a inteligência do nosso Hook de uma vez só!
     const { estados, acoes, configs } = useMediaView();
 
     return (
