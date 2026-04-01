@@ -3,18 +3,19 @@
 
 import { Button, VStack, Text, HStack } from "@chakra-ui/react";
 import { FiMic, FiSquare, FiSend, FiTrash2 } from "react-icons/fi";
-import { useAudioRecorder } from "@/hooks/useAudioRecorder"; // Importando o motor
+import { useAudioRecorder } from "@/features/media/hooks/useAudioRecorder";
 
 interface GravadorAudioProps {
     tutorialId: number;
+    idioma: string | null;
 }
 
-export function GravadorAudio({ tutorialId }: GravadorAudioProps) {
+export function GravadorAudio({ tutorialId, idioma }: GravadorAudioProps) {
 
     const {
         gravando, audioBlob, enviando,
         iniciarGravacao, pararGravacao, descartarAudio, enviarAudio
-    } = useAudioRecorder(tutorialId);
+    } = useAudioRecorder(tutorialId, idioma);
 
     return (
         <VStack p={4} borderWidth="1px" borderRadius="lg" bg="gray.50" align="center" gap={4}>

@@ -11,6 +11,7 @@ import "./globals.css";
 
 import { Navbar } from "@/components/layout/Navbar";
 import { Frank_Ruhl_Libre } from "next/font/google";
+import {Toaster} from "@/components/ui/toaster";
 
 const frank = Frank_Ruhl_Libre({
     subsets: ["latin"],
@@ -43,6 +44,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
           {/* children representa o conteúdo da página atual */}
           {children}
+            <Toaster/>
 
         </Provider>
 

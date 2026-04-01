@@ -1,7 +1,8 @@
 // src/hooks/useAudioRecorder.ts
 import { useState, useRef } from "react";
+import { api } from "@/lib/api";
 
-export function useAudioRecorder(tutorialId: number) {
+export function useAudioRecorder(tutorialId: number, idioma: string | null) {
     const [gravando, setGravando] = useState(false);
     const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
     const [enviando, setEnviando] = useState(false);
@@ -44,33 +45,37 @@ export function useAudioRecorder(tutorialId: number) {
 
     const enviarAudio = async () => {
         if (!audioBlob) return;
+
+        // Trava de segurança
+        if (!idioma) {
+            alert("Selecione um idioma antes de gravar!");
+            return;
+        }
+
         setEnviando(true);
 
         const formData = new FormData();
         formData.append("arquivo", audioBlob, "minha_explicacao.webm");
-
-        const meuTokenJWT = "COLE_SEU_TOKEN_AQUI";
+        // Mandamos o idioma direto no FormData para o Spring Boot pegar via @RequestParam
+        formData.append("idioma", idioma);
 
         try {
-            const resposta = await fetch(`http://localhost:8080/api/audio/${tutorialId}/audios`, {
-                method: "POST",
-                headers: { "Authorization": `Bearer ${meuTokenJWT}` },
-                body: formData,
-            });
+            // A MÁGICA AQUI: O api.post já pega o Token sozinho e trata os erros!
+            // Além disso, a URL corrigida batendo com o seu AudioController
+            const resposta = await api.post(`/audio/${tutorialId}`, formData);
 
-            if (resposta.ok) {
+            if (resposta) {
                 alert("Áudio enviado com sucesso!");
-                setAudioBlob(null);
-            } else {
-                alert("Erro ao enviar. Verifique o Token.");
+                setAudioBlob(null); // Limpa o áudio da tela
             }
         } catch (erro) {
+            // O erro 401/403 (Sessão Expirada) já é tratado dentro do próprio api.ts!
             console.error("Falha na API:", erro);
+            alert("Erro ao enviar o áudio. Verifique sua conexão ou faça login novamente.");
         } finally {
             setEnviando(false);
         }
     };
-
     return {
         gravando,
         audioBlob,

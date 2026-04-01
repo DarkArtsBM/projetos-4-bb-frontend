@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Box, Text, HStack, IconButton, VStack, Flex } from "@chakra-ui/react";
 import { FiThumbsUp } from "react-icons/fi";
+import {toaster} from "@/components/ui/toaster";
 
 interface AudioCardProps {
   audioId: number; // Precisamos do ID real
@@ -20,15 +21,26 @@ export function AudioCard({ audioId, nomeAutor, caminhoArquivo, votosIniciais }:
   const [carregando, setCarregando] = useState(false);
 
   const handleUpvote = async () => {
-    if (jaVotou) return; // Se já votou, ignora o clique
+    if (jaVotou) return;
     setCarregando(true);
 
 
     //  token gerado no Postman
-    const meuTokenJWT = "COLE_SEU_TOKEN_AQUI";
+    const meuTokenJWT = localStorage.getItem("token");
+
+    if (!meuTokenJWT) {
+      toaster.create({
+        title: "Erro",
+        description: "Voce precisa estar logado para votar.",
+        type: "error",
+      });
+
+      setCarregando(false);
+      return;
+    }
 
     try {
-      const resposta = await fetch(`http://localhost:8080/api/tutoriais/audios/${audioId}/upvote`, {
+      const resposta = await fetch(`${process.env.NEXT_PUBLIC_API_URL}tutoriais/audios/${audioId}/upvote`, {
         method: "PATCH",
         headers: {
           "Authorization": `Bearer ${meuTokenJWT}`,
@@ -41,7 +53,12 @@ export function AudioCard({ audioId, nomeAutor, caminhoArquivo, votosIniciais }:
         setVotos(dadosAtualizados.votos);
         setJaVotou(true);
       } else if (resposta.status === 403 || resposta.status === 401) {
-        alert("Você precisa fazer login para votar!");
+        toaster.create({
+          title: "Sessao Expirada",
+          description: "Sua Sessao expirou, faca login novamente.",
+          type: "error",
+        });
+        localStorage.removeItem("token");
       }
     } catch (erro) {
       console.error("Erro ao votar:", erro);
@@ -49,6 +66,7 @@ export function AudioCard({ audioId, nomeAutor, caminhoArquivo, votosIniciais }:
       setCarregando(false);
     }
   };
+
 
   // Monta a URL completa para o player de áudio achar o arquivo no Java
   const urlCompletaDoAudio = `http://localhost:8080${caminhoArquivo}`;

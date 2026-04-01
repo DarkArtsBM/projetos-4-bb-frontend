@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 interface SelectionState {
   selectedLanguage: string | null;
@@ -8,10 +9,17 @@ interface SelectionState {
   reset: () => void;
 }
 
-export const useSelectionStore = create<SelectionState>((set) => ({
-  selectedLanguage: null,
-  selectProcess: null,
-  setLanguage: (nome) => set({ selectedLanguage: nome }),
-  setProcess: (nome) => set({ selectProcess: nome }),
-  reset: () => set({ selectedLanguage: null, selectProcess: null }),
-}));
+export const useSelectionStore = create<SelectionState>()(
+    persist(
+        (set) => ({
+          selectedLanguage: null,
+          selectProcess: null,
+          setLanguage: (nome) => set({ selectedLanguage: nome }),
+          setProcess: (nome) => set({ selectProcess: nome }),
+          reset: () => set({ selectedLanguage: null, selectProcess: null }),
+        }),
+        {
+          name: 'selecao-usuario', // Nome da chave no LocalStorage
+        }
+    )
+);

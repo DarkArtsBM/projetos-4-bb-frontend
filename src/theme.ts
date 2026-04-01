@@ -35,7 +35,9 @@ const config = defineConfig({
       },
     },
   },
+
 });
+
 
 
 // Aqui criamos o "system" do Chakra.

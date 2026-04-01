@@ -1,5 +1,5 @@
 import { Flex } from "@chakra-ui/react";
-import { LoginForm } from "@/components/features/LoginForm";
+import { LoginForm } from "@/features/login/LoginForm";
 
 export default function LoginPage() {
     return (
