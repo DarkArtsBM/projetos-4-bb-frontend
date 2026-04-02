@@ -20,7 +20,7 @@ interface TutorialDTO {
     youtubeUrl: string;
 }
 
-// 3. Idiomas podem continuar fixos no Front (ou vir do banco se preferir)
+// 3. Idiomas fixos no Front (puxar do banco depois)
 const IDIOMAS_DISPONIVEIS = ["Português", "Kayapó", "Tukano"];
 
 export function useMediaView() {
@@ -31,7 +31,7 @@ export function useMediaView() {
     const [audiosComunidade, setAudiosComunidade] = useState<AudioResponseDTO[]>([]);
     const [carregandoAudios, setCarregandoAudios] = useState(false);
 
-    // EFEITO 1: Busca a lista de Tutoriais (Processos) assim que a tela abre
+    // EFEITO 1: Busca a lista de Tutoriais
     useEffect(() => {
         async function buscarTutoriais() {
             try {

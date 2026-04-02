@@ -96,7 +96,7 @@ export function LoginForm() {
                         />
                     </Field.Root>
 
-                    {/* Campo de Senha usando o PasswordInput da sua UI */}
+                    {/* Campo de Senha */}
                     <Field.Root>
                         <Field.Label color="gray.700" fontWeight="bold">Senha</Field.Label>
                         <PasswordInput
