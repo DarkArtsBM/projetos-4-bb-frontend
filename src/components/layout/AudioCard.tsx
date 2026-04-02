@@ -38,7 +38,7 @@ export function AudioCard({ audioId, nomeAutor, caminhoArquivo, votosIniciais }:
     try {
       // 1. TENTA CONEXÃO REAL COM O BACK-END
       const dadosAtualizados = await api.patch<{ votos: number }>(
-          `/audios/${audioId}/upvote`,
+          `/audio/${audioId}/upvote`,
           {}
       );
 
@@ -46,21 +46,17 @@ export function AudioCard({ audioId, nomeAutor, caminhoArquivo, votosIniciais }:
       setJaVotou(true);
       toaster.create({ title: "Voto registrado!", type: "success" });
 
+
     } catch (erro: any) {
+      // 1. TIRA A MÁSCARA DO MODO DEMO E MOSTRA A VERDADE
+      console.error("🕵️‍♂️ ERRO REAL QUE O JAVA DEVOLVEU:", erro);
 
-      // 2. MODO DEMONSTRACAO ---------------------------------------------
-      // Se o erro for de conexão (Back offline), simulamos o sucesso visual
-      console.warn("Back-end offline, simulando voto localmente para a apresentação.");
-
-      setVotos(prev => prev + 1); // Incremento visual
-      setJaVotou(true);
-
+      // 2. Avisa na tela qual foi o erro exato
       toaster.create({
-        title: "Voto Local (Demo)",
-        description: "O back-end está offline, mas o voto foi computado na tela.",
-        type: "info",
+        title: "Ops, o Java reclamou!",
+        description: erro?.response?.data?.message || erro.message || "Deu erro na API",
+        type: "error", // <-- Deixamos vermelho para chamar atenção
       });
-
       // --------------------------------------------------------------------
 
 
