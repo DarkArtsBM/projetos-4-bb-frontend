@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useSelectionStore } from "@/store/useSelectionStore";
 import { api } from "@/lib/api";
 
-
+// 1. Tipagem dos Áudios
 interface AudioResponseDTO {
     id: number;
     caminhoArquivo: string;
@@ -12,85 +12,81 @@ interface AudioResponseDTO {
     idioma: string;
 }
 
-// MOCKS PARA DEMOSTRAR O FRONT -------------------------------------------------
+// 2. Tipagem dos Tutoriais (Processos) vindos do banco
+interface TutorialDTO {
+    id: number;
+    pergunta: string;
+    descricao: string;
+    youtubeUrl: string;
+}
 
-const MVP_CONFIG = {
-    idiomas: ["Português", "Kayapó", "Tukano"],
-    processos: {
-        "Pagamento": { id: 1, videoUrl: "https://www.youtube.com/embed/98X02Dz6yfI/", descricao: "Orientações sobre saques, depósitos e transferências." },
-        "Serviço": { id: 2, videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ", descricao: "Informações sobre os serviços disponíveis nas agências." },
-        "Senha": { id: 3, videoUrl: "https://www.youtube.com/embed/F-wOvzPQ2DM/", descricao: "Passo a passo para recuperação de senhas." },
-    }
-};
-
-const AUDIOS_MOCK: AudioResponseDTO[] = [
-    {
-        id: 101,
-        caminhoArquivo: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-        votos: 15,
-        idioma: "Kayapó",
-        tutorialId: 1,
-        dataCriacao: "2023-10-01"
-    },
-    {
-        id: 102,
-        caminhoArquivo: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-        votos: 8,
-        idioma: "Tukano",
-        tutorialId: 1,
-        dataCriacao: "2023-10-02"
-    },
-    {
-        id: 103,
-        caminhoArquivo: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
-        votos: 22,
-        idioma: "Português",
-        tutorialId: 2,
-        dataCriacao: "2023-10-03"
-    }
-];
-
-
-// -----------------------------------------------------------------------
+// 3. Idiomas podem continuar fixos no Front (ou vir do banco se preferir)
+const IDIOMAS_DISPONIVEIS = ["Português", "Kayapó", "Tukano"];
 
 export function useMediaView() {
     const { selectedLanguage, selectProcess, setLanguage, setProcess } = useSelectionStore();
+
+    // Estados
+    const [tutoriais, setTutoriais] = useState<TutorialDTO[]>([]);
     const [audiosComunidade, setAudiosComunidade] = useState<AudioResponseDTO[]>([]);
     const [carregandoAudios, setCarregandoAudios] = useState(false);
 
-    const processosNomes = Object.keys(MVP_CONFIG.processos);
-    const conteudoAtual = selectProcess ? MVP_CONFIG.processos[selectProcess as keyof typeof MVP_CONFIG.processos] : null;
+    // EFEITO 1: Busca a lista de Tutoriais (Processos) assim que a tela abre
+    useEffect(() => {
+        async function buscarTutoriais() {
+            try {
+                // Vai no Java buscar os processos (Pagamento, Serviço, etc)
+                const dados = await api.get<TutorialDTO[]>("/tutoriais");
+                setTutoriais(dados || []);
+            } catch (error) {
+                console.error("Erro ao buscar a lista de tutoriais:", error);
+            }
+        }
+        buscarTutoriais();
+    }, []);
 
+    // Deriva os dados da tela com base no que veio do banco
+    const processosNomes = tutoriais.map(t => t.pergunta);
+    const conteudoAtual = tutoriais.find(t => t.pergunta === selectProcess) || null;
+
+    // EFEITO 2: Busca os Áudios quando o usuário escolhe um idioma e um processo
     useEffect(() => {
         async function buscarAudios() {
-            if (!selectedLanguage || !conteudoAtual) return;
+            // Se não escolheu idioma ou processo ainda, limpa a lista e para por aqui
+            if (!selectedLanguage || !conteudoAtual) {
+                setAudiosComunidade([]);
+                return;
+            }
 
             setCarregandoAudios(true);
             try {
+
                 const dados = await api.get<AudioResponseDTO[]>(`/audio/${conteudoAtual.id}?idioma=${selectedLanguage}`);
 
-
-                setAudiosComunidade(dados && dados.length > 0 ? dados : AUDIOS_MOCK.filter(a => a.idioma === selectedLanguage));
+                // Se voltar dados, preenche. Se voltar vazio, deixa a lista vazia.
+                setAudiosComunidade(dados || []);
 
             } catch (erro) {
-
-                // FILTRO MOCK: Mostra apenas os áudios do idioma selecionado
-                console.warn("Back-end offline. Mostrando áudios de teste.");
-                const filtrados = AUDIOS_MOCK.filter(a => a.idioma === selectedLanguage);
-                setAudiosComunidade(filtrados);
-
-                //-----------------------------------------------------
+                console.error("Erro ao buscar áudios reais:", erro);
+                setAudiosComunidade([]); // Garante que a tela não quebre
             } finally {
                 setCarregandoAudios(false);
             }
         }
 
         buscarAudios();
-    }, [selectedLanguage, conteudoAtual]);
+    }, [selectedLanguage, conteudoAtual]); // Roda de novo se mudar idioma ou processo
 
     return {
-        estados: { selectedLanguage, selectProcess, audiosComunidade, carregandoAudios, processosNomes, conteudoAtual },
+        estados: {
+            selectedLanguage,
+            selectProcess,
+            audiosComunidade,
+            carregandoAudios,
+            processosNomes,
+            conteudoAtual
+        },
         acoes: { setLanguage, setProcess },
-        configs: { idiomas: MVP_CONFIG.idiomas }
+        configs: { idiomas: IDIOMAS_DISPONIVEIS }
     };
 }

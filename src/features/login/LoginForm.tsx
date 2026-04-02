@@ -38,6 +38,7 @@ export function LoginForm() {
             });
 
             localStorage.setItem("token", data.token);
+            window.dispatchEvent(new Event("storage"));
 
             toaster.create({
                 title: "Bem-vindo!",

@@ -19,8 +19,8 @@ export function MediaView() {
                         <VStack align="start" gap={8}>
                             <Box w="full" borderRadius="20px" overflow="hidden" boxShadow="2xl" bg="black">
                                 <AspectRatio ratio={16 / 9}>
-                                    {estados.conteudoAtual?.videoUrl ? (
-                                        <iframe src={estados.conteudoAtual.videoUrl} title="YouTube video player"
+                                    {estados.conteudoAtual?.youtubeUrl ? (
+                                        <iframe src={estados.conteudoAtual.youtubeUrl} title="YouTube video player"
                                                 frameBorder="0" allowFullScreen style={{ width: '100%', height: '100%' }} />
                                     ) : (
                                         <Flex align="center" justify="center" bg="gray.800" p={10}>
