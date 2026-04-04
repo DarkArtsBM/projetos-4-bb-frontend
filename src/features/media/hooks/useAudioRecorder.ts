@@ -46,9 +46,19 @@ export function useAudioRecorder(tutorialId: number, idioma: string | null) {
     const enviarAudio = async () => {
         if (!audioBlob) return;
 
+        const token = localStorage.getItem("token");
+
         // Trava de segurança
         if (!idioma) {
             toaster.create({ title: "Atenção", description: "Selecione um idioma antes de gravar!", type: "warning" });
+            return;
+        }
+        if (!token) {
+            toaster.create({
+                title: "Acesso restrito",
+                description: "Você precisa estar logado para enviar.",
+                type: "error",
+            });
             return;
         }
 

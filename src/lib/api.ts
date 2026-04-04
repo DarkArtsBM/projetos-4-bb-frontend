@@ -30,18 +30,7 @@ export const api = {
             headers,
         });
 
-        // 5. Tratamento de erro global
-        if (!response.ok) {
-            if (response.status === 401 || response.status === 403) {
-                console.error("Sessão expirada.");
-                if (typeof window !== "undefined") {
-                    localStorage.removeItem("token");
-                }
-            }
-            throw new Error(`Erro na API: ${response.status}`);
-        }
-
-        // 6. Devolve os dados prontos
+        // 5. Devolve os dados prontos
         try {
             return await response.json();
         } catch (e) {
