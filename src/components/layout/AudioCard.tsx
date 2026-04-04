@@ -48,16 +48,13 @@ export function AudioCard({ audioId, nomeAutor, caminhoArquivo, votosIniciais }:
 
 
     } catch (erro: any) {
-      // 1. TIRA A MÁSCARA DO MODO DEMO E MOSTRA A VERDADE
-      console.error("🕵️‍♂️ ERRO REAL QUE O JAVA DEVOLVEU:", erro);
 
-      // 2. Avisa na tela qual foi o erro exato
       toaster.create({
-        title: "Ops, o Java reclamou!",
-        description: erro?.response?.data?.message || erro.message || "Deu erro na API",
-        type: "error", // <-- Deixamos vermelho para chamar atenção
+        title: "Erro Back-End",
+        description: erro?.response?.data?.message || erro.message || "fail to fetch API",
+        type: "error",
       });
-      // --------------------------------------------------------------------
+
 
 
     } finally {
@@ -65,8 +62,6 @@ export function AudioCard({ audioId, nomeAutor, caminhoArquivo, votosIniciais }:
     }
   };
 
-  // Lógica para o Player: Se o caminho for uma URL completa (do Mock), usa ela.
-  // Se for apenas o caminho do Java, concatena o localhost.
 
   const urlFinal = caminhoArquivo.startsWith("http")
       ? caminhoArquivo

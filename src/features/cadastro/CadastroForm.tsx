@@ -10,7 +10,8 @@ export function CadastroForm() {
     const { estados, acoes } = useCadastro();
 
     return (
-        <Box p={8} bg="white" borderRadius="2xl" shadow="2xl" w={{ base: "90vw", md: "400px" }} border="1px solid" borderColor="gray.100" data-theme="light">
+        <Box p={8} bg="white" borderRadius="2xl" shadow="2xl" w={{ base: "90vw", md: "400px" }}
+             border="1px solid" borderColor="gray.100" data-theme="light">
             <form onSubmit={acoes.handleCadastro}>
                 <VStack gap={5} w="full" align="stretch">
                     <VStack gap={1} mb={2} align="center">
