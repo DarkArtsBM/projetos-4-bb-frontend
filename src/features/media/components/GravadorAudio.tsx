@@ -17,7 +17,7 @@ export function GravadorAudio({ tutorialId, idioma }: GravadorAudioProps) {
     } = useAudioRecorder(tutorialId, idioma);
 
     return (
-        <VStack p={4} borderWidth="1px" borderRadius="lg" bg="gray.50" align="center" gap={4}>
+        <VStack w="full" p={4} borderWidth="1px" borderRadius="lg" bg="gray.50" align="center" gap={4}>
             <Text fontWeight="bold" color="gray.700">Grave sua explicação</Text>
 
             {!audioBlob ? (
