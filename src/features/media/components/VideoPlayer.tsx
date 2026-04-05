@@ -1,13 +1,12 @@
 import { Box, AspectRatio, Flex, Text } from "@chakra-ui/react";
 
-// Tipagem: O que essa "TV" precisa para funcionar? Só a URL!
+// Tipagem: O videoPlayer PRECISA da URL
 interface VideoPlayerProps {
     urlYoutube?: string;
 }
 
 export function VideoPlayer({ urlYoutube }: VideoPlayerProps) {
     return (
-        // A Box preta com sombra veio para cá!
         <Box w="full" borderRadius="20px" overflow="hidden" boxShadow="2xl" bg="black">
             <AspectRatio ratio={16 / 9}>
                 {urlYoutube ? (
