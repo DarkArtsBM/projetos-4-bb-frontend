@@ -87,6 +87,7 @@ export function HomeView() {
                         <Button
                             variant="outline"
                             colorScheme="blue"
+                            bg="blue.800"
                             borderColor="blue.600"
                             onClick={() => router.push("/media")}
                         >
