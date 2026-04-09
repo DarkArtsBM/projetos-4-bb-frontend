@@ -29,6 +29,11 @@ export const api = {
             ...options,
             headers,
         });
+        if (!response.ok) {
+            // Tenta ler a mensagem de erro do Java (se houver), ou lança um genérico
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || `Erro na requisição: ${response.status}`);
+        }
 
         // 5. Devolve os dados prontos
         try {

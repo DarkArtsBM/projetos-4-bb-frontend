@@ -9,6 +9,7 @@ interface AudioResponseDTO {
     tutorialId: number;
     votos: number;
     idioma: string;
+    nomeAutor: string;
 }
 
 interface ListaAudiosComunidadeProps {
@@ -33,7 +34,7 @@ export function ListaAudios({ audios, carregando }: ListaAudiosComunidadeProps) 
                         <AudioCard
                             key={audio.id}
                             audioId={audio.id}
-                            nomeAutor="Usuário da Comunidade"
+                            nomeAutor={audio.nomeAutor}
                             caminhoArquivo={audio.caminhoArquivo}
                             votosIniciais={audio.votos}
                         />
