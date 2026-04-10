@@ -5,6 +5,7 @@ import { Box, Flex, Text, VStack, HStack, IconButton } from "@chakra-ui/react";
 import { FiThumbsUp } from "react-icons/fi";
 import { toaster } from "@/components/ui/toaster";
 import { api } from "@/lib/api";
+import { useSelectionStore } from "@/store/useSelectionStore";
 
 interface AudioCardProps {
   audioId: number;
@@ -17,6 +18,7 @@ export function AudioCard({ audioId, nomeAutor, caminhoArquivo, votosIniciais }:
   const [votos, setVotos] = useState(votosIniciais);
   const [jaVotou, setJaVotou] = useState(false);
   const [carregando, setCarregando] = useState(false);
+  const dispararPlayMuted = useSelectionStore((state) => state.dispararPlayMuted);
 
   const handleUpvote = async () => {
     if (jaVotou) return;
@@ -94,7 +96,10 @@ export function AudioCard({ audioId, nomeAutor, caminhoArquivo, votosIniciais }:
           </Flex>
 
           {/* Player nativo com a URL tratada */}
-          <audio controls src={urlFinal} style={{ width: "100%", height: "32px" }} />
+          <audio controls
+                 src={urlFinal}
+                 onPlay={dispararPlayMuted}
+                 style={{ width: "100%", height: "32px" }} />
         </VStack>
       </Box>
   );

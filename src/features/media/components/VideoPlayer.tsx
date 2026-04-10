@@ -1,19 +1,33 @@
-import { Box, AspectRatio, Flex, Text } from "@chakra-ui/react";
+"use client";
 
-// Tipagem: O videoPlayer PRECISA da URL
+import { useRef } from "react";
+import { Box, AspectRatio, Flex, Text } from "@chakra-ui/react";
+import { useVideoSync } from "../hooks/useVideoSync";
+
 interface VideoPlayerProps {
     urlYoutube?: string;
 }
 
 export function VideoPlayer({ urlYoutube }: VideoPlayerProps) {
+    const iframeRef = useRef<HTMLIFrameElement>(null);
+    //Logica de Sincronizar os Plays
+    useVideoSync(iframeRef);
+
+
+    const urlFinal = urlYoutube
+        ? `${urlYoutube}${urlYoutube.includes('?') ? '&' : '?'}enablejsapi=1`
+        : "";
+
     return (
         <Box w="full" borderRadius="20px" overflow="hidden" boxShadow="2xl" bg="black">
             <AspectRatio ratio={16 / 9}>
-                {urlYoutube ? (
+                {urlFinal ? (
                     <iframe
-                        src={urlYoutube}
+                        ref={iframeRef}
+                        src={urlFinal}
                         title="YouTube video player"
                         frameBorder="0"
+                        allow="autoplay; encrypted-media"
                         allowFullScreen
                         style={{ width: '100%', height: '100%' }}
                     />

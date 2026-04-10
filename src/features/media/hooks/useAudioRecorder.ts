@@ -1,17 +1,21 @@
 import { useState, useRef } from "react";
 import { api } from "@/lib/api";
 import {toaster} from "@/components/ui/toaster";
+import {useSelectionStore} from "@/store/useSelectionStore";
 
 export function useAudioRecorder(tutorialId: number, idioma: string | null) {
     const [gravando, setGravando] = useState(false);
     const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
     const [enviando, setEnviando] = useState(false);
 
+    const dispararPlayMuted = useSelectionStore((state) => state.dispararPlayMuted);
+
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);
     const pedacosAudioRef = useRef<BlobPart[]>([]);
 
     const iniciarGravacao = async () => {
         try {
+            dispararPlayMuted();
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             const recorder = new MediaRecorder(stream);
             mediaRecorderRef.current = recorder;
