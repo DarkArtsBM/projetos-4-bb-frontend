@@ -60,4 +60,8 @@ export const api = {
     patch<T>(endpoint: string, options?: FetchOptions) {
         return this.request<T>(endpoint, { ...options, method: "PATCH" });
     },
+
+    delete<T>(endpoint: string, options?: FetchOptions) {
+        return this.request<T>(endpoint, { ...options, method: "DELETE" });
+    }
 };
