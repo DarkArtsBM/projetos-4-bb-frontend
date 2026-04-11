@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { BotaoAdmin } from "@/features/admin/components/BotaoAdmin";
 
 export const Navbar = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -31,9 +32,11 @@ export const Navbar = () => {
 
     const handleLogout = () => {
         localStorage.removeItem("token");
+        localStorage.removeItem("cargo");
+        localStorage.removeItem("nome");
         setIsLoggedIn(false);
-        router.push("/login"); // Redireciona para o login após sair
-        router.refresh();      // Garante que a página atualize os dados
+        router.push("/login");
+        router.refresh();
     };
 
     return (
@@ -75,6 +78,8 @@ export const Navbar = () => {
                 <HStack gap={{ base: 2, md: 4 }}>
                     {isLoggedIn ? (
                         /* --- VISÃO LOGADO --- */
+                        <>
+                        <BotaoAdmin />
                         <Button
                             onClick={handleLogout}
                             size={{ base: "xs", md: "sm" }}
@@ -87,6 +92,7 @@ export const Navbar = () => {
                         >
                             Sair
                         </Button>
+                        </>
                     ) : (
                         /* --- VISÃO DESLOGADO --- */
                         <>

@@ -32,12 +32,15 @@ export function LoginForm() {
 
 
         try {
-            const data = await api.post<{ token: string }>("/usuarios/login", {
+            const data = await api.post<{ token: string; nome: string; cargo: string }>("/usuarios/login", {
                 email,
                 senha,
             });
 
             localStorage.setItem("token", data.token);
+            localStorage.setItem("nome", data.nome);
+            localStorage.setItem("cargo", data.cargo);
+
             window.dispatchEvent(new Event("storage"));
 
             toaster.create({
