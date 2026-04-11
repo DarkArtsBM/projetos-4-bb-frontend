@@ -1,5 +1,5 @@
 import { Flex } from "@chakra-ui/react";
-import { CadastroForm } from "@/components/features/CadastroForm";
+import { CadastroForm } from "@/features/cadastro/CadastroForm"
 
 export default function CadastroPage() {
     return (
