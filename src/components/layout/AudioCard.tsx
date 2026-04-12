@@ -9,7 +9,7 @@ import { useSelectionStore } from "@/store/useSelectionStore";
 
 interface AudioCardProps {
   audioId: number;
-  nomeAutor: string;
+  nomeAutor?: string;
   caminhoArquivo: string;
   votosIniciais: number;
 }

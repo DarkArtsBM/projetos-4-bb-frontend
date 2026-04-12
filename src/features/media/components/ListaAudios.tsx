@@ -1,19 +1,10 @@
 import { VStack, Text, Center, Spinner, SimpleGrid } from "@chakra-ui/react";
 import { AudioCard } from "@/components/layout/AudioCard";
+import { Audio } from "@/types/types"
 
-
-interface AudioResponseDTO {
-    id: number;
-    caminhoArquivo: string;
-    dataCriacao: string;
-    tutorialId: number;
-    votos: number;
-    idioma: string;
-    nomeAutor: string;
-}
 
 interface ListaAudiosComunidadeProps {
-    audios: AudioResponseDTO[];
+    audios: Audio[];
     carregando: boolean;
 }
 
