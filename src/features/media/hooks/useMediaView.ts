@@ -1,24 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSelectionStore } from "@/store/useSelectionStore";
 import { api } from "@/lib/api";
-
-// 1. Tipagem dos Áudios
-interface AudioResponseDTO {
-    id: number;
-    caminhoArquivo: string;
-    dataCriacao: string;
-    tutorialId: number;
-    votos: number;
-    idioma: string;
-}
-
-// 2. Tipagem dos Tutoriais (Processos) vindos do banco
-interface TutorialDTO {
-    id: number;
-    pergunta: string;
-    descricao: string;
-    youtubeUrl: string;
-}
+import { Audio, Tutorial } from "@/types/types"
 
 // 3. Idiomas fixos no Front (puxar do banco depois)
 const IDIOMAS_DISPONIVEIS = ["Português", "Kayapó", "Tukano"];
@@ -27,8 +10,8 @@ export function useMediaView() {
     const { selectedLanguage, selectProcess, setLanguage, setProcess } = useSelectionStore();
 
     // Estados
-    const [tutoriais, setTutoriais] = useState<TutorialDTO[]>([]);
-    const [audiosComunidade, setAudiosComunidade] = useState<AudioResponseDTO[]>([]);
+    const [tutoriais, setTutoriais] = useState<Tutorial[]>([]);
+    const [audiosComunidade, setAudiosComunidade] = useState<Audio[]>([]);
     const [carregandoAudios, setCarregandoAudios] = useState(false);
 
     // EFEITO 1: Busca a lista de Tutoriais
@@ -36,7 +19,7 @@ export function useMediaView() {
         async function buscarTutoriais() {
             try {
                 // Vai no Java buscar os processos (Pagamento, Serviço, etc)
-                const dados = await api.get<TutorialDTO[]>("/tutoriais");
+                const dados = await api.get<Tutorial[]>("/tutoriais");
                 setTutoriais(dados || []);
             } catch (error) {
                 console.error("Erro ao buscar a lista de tutoriais:", error);
@@ -61,7 +44,7 @@ export function useMediaView() {
             setCarregandoAudios(true);
             try {
 
-                const dados = await api.get<AudioResponseDTO[]>(`/audio/${conteudoAtual.id}?idioma=${selectedLanguage}`);
+                const dados = await api.get<Audio[]>(`/audio/${conteudoAtual.id}?idioma=${selectedLanguage}`);
 
                 // Se voltar dados, preenche. Se voltar vazio, deixa a lista vazia.
                 setAudiosComunidade(dados || []);

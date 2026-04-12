@@ -12,7 +12,7 @@ export interface Audio {
     tutorialId: number;
     votos: number;
     idioma: string;
-    nomeAutor: string;
+    nomeAutor?: string;
 }
 
 export interface Usuario {
