@@ -1,6 +1,7 @@
 export interface Tutorial {
     id: number;
     pergunta: string;
+    descricao: string;
     youtubeUrl: string;
     dataCriacao: string;
 }
