@@ -28,6 +28,7 @@ export function useMediaView() {
         buscarTutoriais();
     }, []);
 
+
     // Deriva os dados da tela com base no que veio do banco
     const processosNomes = tutoriais.map(t => t.pergunta);
     const conteudoAtual = tutoriais.find(t => t.pergunta === selectProcess) || null;
