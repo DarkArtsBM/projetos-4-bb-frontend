@@ -7,10 +7,8 @@ import { useAuth } from "@/hooks/useAuth"; // Ajuste o caminho se necessário
 
 export function BotaoAdmin() {
     const router = useRouter();
-    // Olha que elegância:
     const { isAdmin } = useAuth();
 
-    // Se não for admin, nem desenha o botão
     if (!isAdmin) return null;
 
     return (

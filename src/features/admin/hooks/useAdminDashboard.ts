@@ -5,7 +5,6 @@ import { toaster } from "@/components/ui/toaster";
 import { Tutorial, Audio, Usuario } from "@/types/types";
 import { formatarUrlYoutube } from "@/utils/youtube";
 
-// IMPORTAMOS A COZINHA!
 import { TutorialService } from "@/services/TutorialService";
 import { AudioService } from "@/services/AudioService";
 import { UsuarioService } from "@/services/UsuarioService";
