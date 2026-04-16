@@ -1,30 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { Button } from "@chakra-ui/react";
 import { FiShield } from "react-icons/fi";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth"; // Ajuste o caminho se necessário
 
 export function BotaoAdmin() {
-    const [isAdmin, setIsAdmin] = useState(false);
     const router = useRouter();
+    // Olha que elegância:
+    const { isAdmin } = useAuth();
 
-
-    useEffect(() => {
-
-        const cargo = localStorage.getItem("cargo");
-
-        if (cargo === "ADMIN"|| cargo === "SUPER_ADMIN") {
-            setIsAdmin(true);
-        }else {
-            setIsAdmin(false);
-        }
-    }, []);
-
-    if (!isAdmin) {
-        return null;
-    }
-
+    // Se não for admin, nem desenha o botão
+    if (!isAdmin) return null;
 
     return (
         <Button

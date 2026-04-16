@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
-import { api } from "@/lib/api";
 import {toaster} from "@/components/ui/toaster";
 import {useSelectionStore} from "@/store/useSelectionStore";
+import {AudioService} from "@/services/AudioService";
 
 export function useAudioRecorder(tutorialId: number, idioma: string | null) {
     const [gravando, setGravando] = useState(false);
@@ -49,54 +49,29 @@ export function useAudioRecorder(tutorialId: number, idioma: string | null) {
 
     const enviarAudio = async () => {
         if (!audioBlob) return;
-
         const token = localStorage.getItem("token");
 
-        // Trava de segurança
-        if (!idioma) {
-            toaster.create({ title: "Atenção", description: "Selecione um idioma antes de gravar!", type: "warning" });
-            return;
-        }
-        if (!token) {
-            toaster.create({
-                title: "Acesso restrito",
-                description: "Você precisa estar logado para enviar.",
-                type: "error",
-            });
-            return;
-        }
+        if (!idioma) return toaster.create({ title: "Atenção", description: "Selecione um idioma!", type: "warning" });
+        if (!token) return toaster.create({ title: "Acesso restrito", description: "Você precisa estar logado.", type: "error" });
 
         setEnviando(true);
-
         const formData = new FormData();
         formData.append("arquivo", audioBlob, "minha_explicacao.webm");
-        // Mandamos o idioma direto no FormData para o Spring Boot pegar via @RequestParam
         formData.append("idioma", idioma);
 
         try {
-            // A MÁGICA AQUI: O api.post já pega o Token sozinho e trata os erros!
-            // Além disso, a URL corrigida batendo com o seu AudioController
-            const resposta = await api.post(`/audio/${tutorialId}`, formData);
 
-            if (resposta) {
-                toaster.create({ title: "Sucesso!", description: "Sua explicação ajudará outras pessoas.", type: "success" });
-                setAudioBlob(null); // Limpa o áudio da tela
-            }
+            await AudioService.enviarAudio(tutorialId, formData);
+
+            toaster.create({ title: "Sucesso!", description: "Sua explicação ajudará outras pessoas.", type: "success" });
+            setAudioBlob(null);
         } catch (erro) {
-            // O erro 401/403 (Sessão Expirada) já é tratado dentro do próprio api.ts!
             console.error("Falha na API:", erro);
             alert("Erro ao enviar o áudio. Verifique sua conexão ou faça login novamente.");
         } finally {
             setEnviando(false);
         }
     };
-    return {
-        gravando,
-        audioBlob,
-        enviando,
-        iniciarGravacao,
-        pararGravacao,
-        descartarAudio,
-        enviarAudio
-    };
+
+    return { gravando, audioBlob, enviando, iniciarGravacao, pararGravacao, descartarAudio, enviarAudio };
 }

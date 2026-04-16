@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useSelectionStore } from "@/store/useSelectionStore";
-import { api } from "@/lib/api";
 import { Audio, Tutorial } from "@/types/types"
+import {TutorialService} from "@/services/TutorialService";
+import {AudioService} from "@/services/AudioService";
 
 // 3. Idiomas fixos no Front (puxar do banco depois)
 const IDIOMAS_DISPONIVEIS = ["Português", "Kayapó", "Tukano"];
@@ -19,7 +20,7 @@ export function useMediaView() {
         async function buscarTutoriais() {
             try {
                 // Vai no Java buscar os processos (Pagamento, Serviço, etc)
-                const dados = await api.get<Tutorial[]>("/tutoriais");
+                const dados = await TutorialService.listarTodos();
                 setTutoriais(dados || []);
             } catch (error) {
                 console.error("Erro ao buscar a lista de tutoriais:", error);
@@ -27,7 +28,6 @@ export function useMediaView() {
         }
         buscarTutoriais();
     }, []);
-
 
     // Deriva os dados da tela com base no que veio do banco
     const processosNomes = tutoriais.map(t => t.pergunta);
@@ -45,9 +45,7 @@ export function useMediaView() {
             setCarregandoAudios(true);
             try {
 
-                const dados = await api.get<Audio[]>(`/audio/${conteudoAtual.id}?idioma=${selectedLanguage}`);
-
-                // Se voltar dados, preenche. Se voltar vazio, deixa a lista vazia.
+                const dados = await AudioService.listarPorTutorialEIdioma(conteudoAtual.id, selectedLanguage);
                 setAudiosComunidade(dados || []);
 
             } catch (erro) {

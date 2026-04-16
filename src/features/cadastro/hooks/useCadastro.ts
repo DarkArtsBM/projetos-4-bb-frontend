@@ -1,19 +1,17 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toaster } from "@/components/ui/toaster";
-import { api } from "@/lib/api";
+import { UsuarioService } from "@/services/UsuarioService" ;
 
 export function useCadastro() {
     const router = useRouter();
 
-    // 1. Centralizamos todos os estados aqui
     const [nome, setNome] = useState("");
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
     const [confirmarSenha, setConfirmarSenha] = useState("");
     const [carregando, setCarregando] = useState(false);
 
-    // 2. A lógica pesada fica isolada
     const handleCadastro = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -29,7 +27,7 @@ export function useCadastro() {
 
         setCarregando(true);
         try {
-            await api.post("/usuarios/cadastro", {
+            await UsuarioService.registrar( {
                 nome, email, senha,
             });
 

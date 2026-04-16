@@ -64,3 +64,9 @@ export interface GravadorAudioProps {
     tutorialId: number;
     idioma: string | null;
 }
+
+export interface LoginResponseDTO {
+    token: string;
+    nome: string;
+    cargo: string;
+}
