@@ -3,7 +3,7 @@
 import { Button } from "@chakra-ui/react";
 import { FiShield } from "react-icons/fi";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/hooks/useAuth"; // Ajuste o caminho se necessário
+import { useAuth } from "@/hooks/useAuth";
 
 export function BotaoAdmin() {
     const router = useRouter();
