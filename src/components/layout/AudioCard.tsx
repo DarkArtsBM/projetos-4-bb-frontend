@@ -6,13 +6,7 @@ import { FiThumbsUp } from "react-icons/fi";
 import { toaster } from "@/components/ui/toaster";
 import { api } from "@/lib/api";
 import { useSelectionStore } from "@/store/useSelectionStore";
-
-interface AudioCardProps {
-  audioId: number;
-  nomeAutor?: string;
-  caminhoArquivo: string;
-  votosIniciais: number;
-}
+import {AudioCardProps} from "@/types/types";
 
 export function AudioCard({ audioId, nomeAutor, caminhoArquivo, votosIniciais }: AudioCardProps) {
   const [votos, setVotos] = useState(votosIniciais);

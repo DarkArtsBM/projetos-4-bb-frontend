@@ -3,10 +3,7 @@
 import { useRef } from "react";
 import { Box, AspectRatio, Flex, Text } from "@chakra-ui/react";
 import { useVideoSync } from "../hooks/useVideoSync";
-
-interface VideoPlayerProps {
-    urlYoutube?: string;
-}
+import { VideoPlayerProps } from "@/types/types";
 
 export function VideoPlayer({ urlYoutube }: VideoPlayerProps) {
     const iframeRef = useRef<HTMLIFrameElement>(null);

@@ -1,8 +1,6 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api";
+import {FetchOptions} from "@/types/types";
 
-interface FetchOptions extends RequestInit {
-    headers?: Record<string, string>;
-}
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api";
 
 export const api = {
     async request<T>(endpoint: string, options: FetchOptions = {}): Promise<T> {

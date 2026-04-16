@@ -1,15 +1,7 @@
 import { Box, VStack, Text } from "@chakra-ui/react";
 import { NativeSelect } from "@chakra-ui/react";
+import {PainelFiltrosProps} from "@/types/types";
 
-
-interface PainelFiltrosProps {
-    idiomas: string[];
-    processos: string[];
-    idiomaSelecionado: string | null;
-    processoSelecionado: string | null;
-    aoMudarIdioma: (idioma: string) => void;
-    aoMudarProcesso: (processo: string) => void;
-}
 
 export function PainelFiltros({
                                   idiomas,
