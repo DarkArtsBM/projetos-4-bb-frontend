@@ -1,15 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-
-interface SelectionState {
-    selectedLanguage: string | null;
-    selectProcess: string | null;
-    gatilhoPlayMuted: number;
-    setLanguage: (nome: string) => void;
-    setProcess: (nome: string) => void;
-    dispararPlayMuted: () => void;
-    reset: () => void;
-}
+import {SelectionState} from "@/types/types";
 
 export const useSelectionStore = create<SelectionState>()(
     persist(

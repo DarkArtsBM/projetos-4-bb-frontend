@@ -3,38 +3,12 @@
 import { Box, Flex, Button, HStack } from "@chakra-ui/react";
 import Link from "next/link";
 import Image from "next/image";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { BotaoAdmin } from "@/features/admin/components/BotaoAdmin";
+import {useAuth} from "@/hooks/useAuth";
 
 export const Navbar = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const router = useRouter();
+    const {isLoggedIn,handleLogout} = useAuth();
 
-    // Verifica se o usuário está logado ao carregar o componente
-    useEffect(() => {
-        // Função que verifica o token
-        const checkToken = () => {
-            const token = localStorage.getItem("token");
-            setIsLoggedIn(!!token);
-        };
-
-        // Verifica ao carregar
-        checkToken();
-
-        // Fica ouvindo se o storage mudou (login/logout em outras abas ou eventos manuais)
-        window.addEventListener("storage", checkToken);
-
-        return () => {
-            window.removeEventListener("storage", checkToken);
-        };
-    }, []);
-
-    const handleLogout = () => {
-        localStorage.removeItem("token");
-        setIsLoggedIn(false);
-        router.push("/login"); // Redireciona para o login após sair
-        router.refresh();      // Garante que a página atualize os dados
-    };
 
     return (
         <Box
@@ -75,6 +49,8 @@ export const Navbar = () => {
                 <HStack gap={{ base: 2, md: 4 }}>
                     {isLoggedIn ? (
                         /* --- VISÃO LOGADO --- */
+                        <>
+                        <BotaoAdmin />
                         <Button
                             onClick={handleLogout}
                             size={{ base: "xs", md: "sm" }}
@@ -87,6 +63,7 @@ export const Navbar = () => {
                         >
                             Sair
                         </Button>
+                        </>
                     ) : (
                         /* --- VISÃO DESLOGADO --- */
                         <>

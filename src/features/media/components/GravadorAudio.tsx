@@ -3,11 +3,8 @@
 import { Button, VStack, Text, HStack } from "@chakra-ui/react";
 import { FiMic, FiSquare, FiSend, FiTrash2 } from "react-icons/fi";
 import { useAudioRecorder } from "@/features/media/hooks/useAudioRecorder";
+import {GravadorAudioProps} from "@/types/types";
 
-interface GravadorAudioProps {
-    tutorialId: number;
-    idioma: string | null;
-}
 
 export function GravadorAudio({ tutorialId, idioma }: GravadorAudioProps) {
 

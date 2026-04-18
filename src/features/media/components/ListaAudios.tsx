@@ -1,21 +1,8 @@
 import { VStack, Text, Center, Spinner, SimpleGrid } from "@chakra-ui/react";
 import { AudioCard } from "@/components/layout/AudioCard";
+import {Audio, ListaAudiosComunidadeProps} from "@/types/types"
 
 
-interface AudioResponseDTO {
-    id: number;
-    caminhoArquivo: string;
-    dataCriacao: string;
-    tutorialId: number;
-    votos: number;
-    idioma: string;
-    nomeAutor: string;
-}
-
-interface ListaAudiosComunidadeProps {
-    audios: AudioResponseDTO[];
-    carregando: boolean;
-}
 
 export function ListaAudios({ audios, carregando }: ListaAudiosComunidadeProps) {
     return (
