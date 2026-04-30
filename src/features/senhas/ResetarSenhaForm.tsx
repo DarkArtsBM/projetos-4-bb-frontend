@@ -19,11 +19,11 @@ export const ResetarSenhaForm= () => {
     return (
         <VStack gap={4} align="stretch" as="form" onSubmit={handleResetar}>
             <Heading size="md" textAlign="center">Criar Nova Senha</Heading>
-            <Text fontSize="sm" color="gray.500" textAlign="center" mb={4}>
+            <Text fontSize="sm" color="gray.700" fontWeight="bold" textAlign="center" mb={4}>
                 Digite a sua nova senha abaixo.
             </Text>
 
-            <Field label="Nova Senha" required>
+            <Field label="Nova Senha" color="gray.700" fontWeight="bold" required>
                 <Input
                     type="password"
                     placeholder="Mínimo 6 caracteres"
@@ -32,7 +32,7 @@ export const ResetarSenhaForm= () => {
                 />
             </Field>
 
-            <Field label="Confirmar Nova Senha" required>
+            <Field label="Confirmar Nova Senha" color="gray.700" fontWeight="bold" required>
                 <Input
                     type="password"
                     placeholder="Repita a nova senha"
