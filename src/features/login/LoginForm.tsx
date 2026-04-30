@@ -1,5 +1,5 @@
 "use client";
-import { VStack, Input, Button, Text, Box, Heading, Field } from "@chakra-ui/react";
+import { VStack, Input, Button, Text, Box, Heading, Field, chakra } from "@chakra-ui/react";
 import { PasswordInput } from "@/components/ui/password-input";
 import { useRouter } from "next/navigation";
 import { useLogin } from "@/features/login/hooks/useLogin";
@@ -59,16 +59,35 @@ export function LoginForm() {
                         Entrar
                     </Button>
 
-                    <Text fontSize="sm" color="gray.600" textAlign="center">
-                        Não tem uma conta?{" "}
-                        <Text
-                            as="span" color="blue.600" fontWeight="bold" cursor="pointer"
-                            _hover={{ textDecoration: "underline" }}
-                            onClick={() => router.push("/cadastro")}
-                        >
-                            Cadastre-se aqui
+                    <VStack gap={2} mt={4}>
+                        {/* Primeira Linha */}
+                        <Text fontSize="sm" color="gray.600" textAlign="center">
+                            Não tem uma conta?{" "}
+                            <chakra.span
+                                color="blue.600"
+                                fontWeight="bold"
+                                cursor="pointer"
+                                _hover={{ textDecoration: "underline" }}
+                                onClick={() => router.push("/cadastro")}
+                            >
+                                Cadastre-se aqui
+                            </chakra.span>
                         </Text>
-                    </Text>
+
+                        {/* Segunda Linha - Agora como um parágrafo irmão, não filho */}
+                        <Text fontSize="sm" color="gray.600" textAlign="center">
+                            Esqueceu a senha?{" "}
+                            <chakra.span
+                                color="blue.600"
+                                fontWeight="bold"
+                                cursor="pointer"
+                                _hover={{ textDecoration: "underline" }}
+                                onClick={() => router.push("/esquecisenha")}
+                            >
+                                Trocar Senha
+                            </chakra.span>
+                        </Text>
+                    </VStack>
                 </VStack>
             </form>
         </Box>

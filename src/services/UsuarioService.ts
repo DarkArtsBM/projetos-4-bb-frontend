@@ -7,4 +7,9 @@ export const UsuarioService = {
     listarComuns: () => api.get<Usuario[]>("/usuarios/comuns"),
     promover: (id: number) => api.patch(`/usuarios/${id}/promover`),
     rebaixar: (id: number) => api.patch(`/usuarios/${id}/rebaixar`),
+    trocarSenha: (dados: { senhaAtual: string; novaSenha: string }) => api.put("/usuarios/trocar-senha", dados),
+    esqueciSenha: (dados: { email: string }) =>
+        api.post("/usuarios/esqueci-senha", dados),
+    resetarSenha: (dados: { token: string; novaSenha: string }) =>
+        api.post("/usuarios/resetar-senha", dados),
 };

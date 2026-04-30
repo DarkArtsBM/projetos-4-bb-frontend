@@ -41,7 +41,7 @@ export const api = {
         }
     },
 
-    // Atalhos práticos
+
     get<T>(endpoint: string, options?: FetchOptions) {
         return this.request<T>(endpoint, { ...options, method: "GET" });
     },
@@ -51,6 +51,15 @@ export const api = {
         return this.request<T>(endpoint, {
             ...options,
             method: "POST",
+            body: isFormData ? body : JSON.stringify(body),
+        });
+    },
+
+    put<T>(endpoint: string, body: any, options?: FetchOptions) {
+        const isFormData = body instanceof FormData;
+        return this.request<T>(endpoint, {
+            ...options,
+            method: "PUT",
             body: isFormData ? body : JSON.stringify(body),
         });
     },
