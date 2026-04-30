@@ -13,7 +13,7 @@ export const api = {
         };
 
         // 2. Coloca o token no envelope automaticamente
-        if (token) {
+        if (token && token !== "null" && token !== "undefined") {
             headers["Authorization"] = `Bearer ${token}`;
         }
 
