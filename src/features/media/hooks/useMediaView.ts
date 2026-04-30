@@ -3,19 +3,33 @@ import { useSelectionStore } from "@/store/useSelectionStore";
 import { Audio, Tutorial } from "@/types/types"
 import {TutorialService} from "@/services/TutorialService";
 import {AudioService} from "@/services/AudioService";
+import { IdiomaService } from "@/services/IdiomaService";
 
-// 3. Idiomas fixos no Front (puxar do banco depois)
-const IDIOMAS_DISPONIVEIS = ["Português", "Kayapó", "Tukano"];
+
 
 export function useMediaView() {
     const { selectedLanguage, selectProcess, setLanguage, setProcess } = useSelectionStore();
+    const [idiomasDisponiveis, setIdiomasDisponiveis] = useState<string[]>([]);
 
-    // Estados
     const [tutoriais, setTutoriais] = useState<Tutorial[]>([]);
     const [audiosComunidade, setAudiosComunidade] = useState<Audio[]>([]);
     const [carregandoAudios, setCarregandoAudios] = useState(false);
 
-    // EFEITO 1: Busca a lista de Tutoriais
+    useEffect(() => {
+        async function buscarIdiomas() {
+            try {
+                const dados = await IdiomaService.listarTodos();
+
+                const nomes = dados.map((idioma: any) => idioma.nome);
+                setIdiomasDisponiveis(nomes);
+            } catch (error) {
+                console.error("Erro ao buscar a lista de idiomas:", error);
+                setIdiomasDisponiveis(["Português"]);
+            }
+        }
+        buscarIdiomas();
+    }, []);
+
     useEffect(() => {
         async function buscarTutoriais() {
             try {
@@ -29,14 +43,11 @@ export function useMediaView() {
         buscarTutoriais();
     }, []);
 
-    // Deriva os dados da tela com base no que veio do banco
     const processosNomes = tutoriais.map(t => t.pergunta);
     const conteudoAtual = tutoriais.find(t => t.pergunta === selectProcess) || null;
 
-    // EFEITO 2: Busca os Áudios quando o usuário escolhe um idioma e um processo
     useEffect(() => {
         async function buscarAudios() {
-            // Se não escolheu idioma ou processo ainda, limpa a lista e para por aqui
             if (!selectedLanguage || !conteudoAtual) {
                 setAudiosComunidade([]);
                 return;
@@ -50,14 +61,14 @@ export function useMediaView() {
 
             } catch (erro) {
                 console.error("Erro ao buscar áudios reais:", erro);
-                setAudiosComunidade([]); // Garante que a tela não quebre
-            } finally {
+                setAudiosComunidade([]);
+            }finally {
                 setCarregandoAudios(false);
             }
         }
 
         buscarAudios();
-    }, [selectedLanguage, conteudoAtual]); // Roda de novo se mudar idioma ou processo
+    }, [selectedLanguage, conteudoAtual]);
 
     return {
         estados: {
@@ -69,6 +80,6 @@ export function useMediaView() {
             conteudoAtual
         },
         acoes: { setLanguage, setProcess },
-        configs: { idiomas: IDIOMAS_DISPONIVEIS }
+        configs: { idiomas: idiomasDisponiveis}
     };
 }

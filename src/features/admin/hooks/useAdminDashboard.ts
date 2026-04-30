@@ -8,9 +8,10 @@ import { formatarUrlYoutube } from "@/utils/youtube";
 import { TutorialService } from "@/services/TutorialService";
 import { AudioService } from "@/services/AudioService";
 import { UsuarioService } from "@/services/UsuarioService";
+import { IdiomaService } from "@/services/IdiomaService";
 
 export function useAdminDashboard() {
-    const [abaAtiva, setAbaAtiva] = useState<"TUTORIAIS" | "MODERACAO" | "USUARIOS">("TUTORIAIS");
+    const [abaAtiva, setAbaAtiva] = useState<"TUTORIAIS" | "MODERACAO" | "USUARIOS" | "IDIOMAS">("TUTORIAIS");
     const [tutoriais, setTutoriais] = useState<Tutorial[]>([]);
     const [audiosPendentes, setAudiosPendentes] = useState<Audio[]>([]);
     const [usuariosComuns, setUsuariosComuns] = useState<Usuario[]>([]);
@@ -20,6 +21,12 @@ export function useAdminDashboard() {
     const [novaPergunta, setNovaPergunta] = useState("");
     const [novaUrl, setNovaUrl] = useState("");
     const [carregandoForm, setCarregandoForm] = useState(false);
+
+    // Estados de Idiomas e Filtros
+    const [idiomas, setIdiomas] = useState<any[]>([]);
+    const [novoNomeIdioma, setNovoNomeIdioma] = useState("");
+    const [novoCodigoIdioma, setNovoCodigoIdioma] = useState("");
+    const [filtroIdioma, setFiltroIdioma] = useState(""); // <-- Novo estado para o filtro
 
     // --- FUNÇÕES DE BUSCA (GET) ---
     const buscarTutoriais = async () => {
@@ -42,41 +49,42 @@ export function useAdminDashboard() {
         catch (e) { console.error("Erro ao buscar aprovados"); }
     };
 
+    const buscarIdiomas = async () => {
+        try { const res = await IdiomaService.listarTodos(); setIdiomas(res || []); }
+        catch (e) { console.error("Erro ao buscar idiomas"); }
+    };
+
     useEffect(() => {
         setCargoLogado(localStorage.getItem("cargo"));
-
         if (abaAtiva === "TUTORIAIS") buscarTutoriais();
         if (abaAtiva === "MODERACAO") {
             buscarAudiosPendentes();
             buscarAudiosAprovados();
+            buscarIdiomas(); // Carrega idiomas para o filtro
         }
         if (abaAtiva === "USUARIOS") buscarUsuariosComuns();
+        if (abaAtiva === "IDIOMAS") buscarIdiomas();
     }, [abaAtiva]);
 
     // --- FUNÇÕES DE AÇÃO ---
     const criarTutorial = async () => {
         if (!novaPergunta || !novaUrl) return toaster.create({ title: "Preencha tudo!", type: "warning" });
-
         setCarregandoForm(true);
         try {
             const urlProntaParaBanco = formatarUrlYoutube(novaUrl);
             await TutorialService.criar({ pergunta: novaPergunta, youtubeUrl: urlProntaParaBanco });
-
             toaster.create({ title: "Tutorial criado!", type: "success" });
             setNovaPergunta(""); setNovaUrl("");
             buscarTutoriais();
-        } catch (e) {
-            toaster.create({ title: "Erro ao criar", type: "error" });
-        } finally {
-            setCarregandoForm(false);
-        }
+        } catch (e) { toaster.create({ title: "Erro ao criar", type: "error" }); }
+        finally { setCarregandoForm(false); }
     };
 
     const deletarTutorial = async (id: number) => {
-        if (!window.confirm("🚨 ATENÇÃO: Deletar este tutorial apagará TODOS os áudios associados a ele. Continuar?")) return;
+        if (!window.confirm("Atenção: Deletar este tutorial apagará TODOS os áudios associados!")) return;
         try {
             await TutorialService.deletar(id);
-            toaster.create({ title: "Tutorial demolido!", type: "success" });
+            toaster.create({ title: "Tutorial deletado!", type: "success" });
             buscarTutoriais();
         } catch (e) { toaster.create({ title: "Erro ao deletar", type: "error" }); }
     };
@@ -90,7 +98,7 @@ export function useAdminDashboard() {
     };
 
     const reprovarAudio = async (id: number) => {
-        if (!window.confirm("Tem certeza que deseja apagar permanentemente este áudio?")) return;
+        if (!window.confirm("Deseja apagar permanentemente este áudio?")) return;
         try {
             await AudioService.reprovar(id);
             toaster.create({ title: "Áudio apagado.", type: "success" });
@@ -99,32 +107,53 @@ export function useAdminDashboard() {
     };
 
     const excluirAudioPostado = async (id: number) => {
-        if (!window.confirm("Deseja realmente excluir este áudio que já está publicado?")) return;
+        if (!window.confirm("Deseja realmente excluir este áudio publicado?")) return;
         try {
             await AudioService.deletarPostado(id);
-            toaster.create({ title: "Áudio removido do ar!", type: "success" });
+            toaster.create({ title: "Áudio removido!", type: "success" });
             buscarAudiosAprovados();
         } catch (e) { toaster.create({ title: "Erro ao excluir", type: "error" }); }
     };
 
     const promoverUsuario = async (id: number, nome: string) => {
-        if (!window.confirm(`Tem certeza que deseja dar poderes de ADMIN para ${nome}?`)) return;
+        if (!window.confirm(`Promover ${nome} a ADMIN?`)) return;
         try {
             await UsuarioService.promover(id);
-            toaster.create({ title: `${nome} promovido com sucesso!`, type: "success" });
+            toaster.create({ title: "Sucesso!", type: "success" });
             buscarUsuariosComuns();
         } catch (e) { toaster.create({ title: "Erro ao promover", type: "error" }); }
     };
 
     const rebaixarUsuario = async (id: number, nome: string) => {
-        if (!window.confirm(`Deseja realmente remover os poderes de Admin de ${nome}?`)) return;
+        if (!window.confirm(`Remover poderes de Admin de ${nome}?`)) return;
         try {
             await UsuarioService.rebaixar(id);
-            toaster.create({ title: `${nome} rebaixado para Usuário comum.`, type: "success" });
+            toaster.create({ title: "Sucesso!", type: "success" });
             buscarUsuariosComuns();
         } catch (e: any) {
-            toaster.create({ title: "Sem permissão!", description: e.response?.data || "Apenas o Super Admin pode fazer isso.", type: "error" });
+            toaster.create({ title: "Sem permissão!", type: "error" });
         }
+    };
+
+    const criarIdioma = async () => {
+        if (!novoNomeIdioma || !novoCodigoIdioma) return toaster.create({ title: "Preencha tudo!", type: "warning" });
+        setCarregandoForm(true);
+        try {
+            await IdiomaService.criar({ nome: novoNomeIdioma, codigo: novoCodigoIdioma });
+            toaster.create({ title: "Cadastrado!", type: "success" });
+            setNovoNomeIdioma(""); setNovoCodigoIdioma("");
+            buscarIdiomas();
+        } catch (e) { toaster.create({ title: "Erro ao criar", type: "error" }); }
+        finally { setCarregandoForm(false); }
+    };
+
+    const deletarIdioma = async (id: number) => {
+        if (!window.confirm("Cuidado: Isso pode afetar áudios já postados!")) return;
+        try {
+            await IdiomaService.deletar(id);
+            toaster.create({ title: "Removido!", type: "success" });
+            buscarIdiomas();
+        } catch (e) { toaster.create({ title: "Erro ao deletar", type: "error" }); }
     };
 
     return {
@@ -135,11 +164,10 @@ export function useAdminDashboard() {
             usuariosComuns,
             audiosAprovados,
             cargoLogado,
-            form: {
-                novaPergunta,
-                novaUrl,
-                carregandoForm
-            }
+            filtroIdioma, // <-- Exportado
+            idiomas,
+            form: { novaPergunta, novaUrl, carregandoForm },
+            formIdioma: { novoNomeIdioma, novoCodigoIdioma }
         },
         acoes: {
             setAbaAtiva,
@@ -151,7 +179,12 @@ export function useAdminDashboard() {
             reprovarAudio,
             promoverUsuario,
             excluirAudioPostado,
-            rebaixarUsuario
+            rebaixarUsuario,
+            setNovoNomeIdioma,
+            setNovoCodigoIdioma,
+            criarIdioma,
+            deletarIdioma,
+            setFiltroIdioma,
         }
     };
 }

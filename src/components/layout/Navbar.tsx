@@ -28,7 +28,7 @@ export const Navbar = () => {
                 maxW="1440px"
                 mx="auto"
             >
-                {/* Logo */}
+
                 <Link href="/">
                     <Box
                         position="relative"
@@ -45,10 +45,10 @@ export const Navbar = () => {
                     </Box>
                 </Link>
 
-                {/* Botões Dinâmicos */}
+
                 <HStack gap={{ base: 2, md: 4 }}>
                     {isLoggedIn ? (
-                        /* --- VISÃO LOGADO --- */
+
                         <>
                         <BotaoAdmin />
                         <Button
@@ -65,7 +65,7 @@ export const Navbar = () => {
                         </Button>
                         </>
                     ) : (
-                        /* --- VISÃO DESLOGADO --- */
+
                         <>
                             <Link href="/login" style={{ textDecoration: 'none' }}>
                                 <Button

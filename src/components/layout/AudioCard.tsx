@@ -38,7 +38,6 @@ export function AudioCard({ audioId, nomeAutor, caminhoArquivo, votosIniciais }:
             </HStack>
           </Flex>
 
-          {/* Player nativo com a URL tratada */}
           <audio controls
                  src={urlFinal}
                  onPlay={acoes.dispararPlayMuted}

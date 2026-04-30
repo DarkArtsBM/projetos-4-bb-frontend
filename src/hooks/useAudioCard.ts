@@ -27,7 +27,7 @@ export function useAudioCard(audioId: number, votosIniciais: number) {
         setCarregando(true);
 
         try {
-            // Chamamos o serviço em vez da api diretamente
+
             const dadosAtualizados = await AudioService.votar(audioId);
 
             setVotos(dadosAtualizados.votos);

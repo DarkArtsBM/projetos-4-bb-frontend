@@ -9,7 +9,7 @@ export function ServiceFooter() {
             <Container maxW="container.xl">
                 <Flex direction={{ base: "column", lg: "row" }} align="center" gap={10}>
 
-                    {/* Grid de Contatos */}
+
                     <SimpleGrid columns={{ base: 1, md: 3 }} gapX={12} gapY={6} flex="1">
                         {FOOTER_CONTACTS.map((item, index) => (
                             <VStack key={index} align="start" gap={0}>
