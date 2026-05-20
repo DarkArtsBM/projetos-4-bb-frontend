@@ -17,7 +17,17 @@ export function useAudioRecorder(tutorialId: number, idioma: string | null) {
         try {
             dispararPlayMuted();
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            const recorder = new MediaRecorder(stream);
+
+            let opcoesMimeType = {};
+            if (MediaRecorder.isTypeSupported('audio/webm')) {
+                opcoesMimeType = { mimeType: 'audio/webm' };
+            } else if (MediaRecorder.isTypeSupported('audio/mp4')) {
+                opcoesMimeType = { mimeType: 'audio/mp4' };
+            } else if (MediaRecorder.isTypeSupported('audio/aac')) {
+                opcoesMimeType = { mimeType: 'audio/aac' };
+            }
+
+            const recorder = new MediaRecorder(stream, opcoesMimeType);
             mediaRecorderRef.current = recorder;
             pedacosAudioRef.current = [];
 
@@ -26,18 +36,16 @@ export function useAudioRecorder(tutorialId: number, idioma: string | null) {
             };
 
             recorder.onstop = () => {
-                const arquivoFinal = new Blob(pedacosAudioRef.current, { type: "audio/webm" });
+                const arquivoFinal = new Blob(pedacosAudioRef.current, { type: recorder.mimeType });
                 setAudioBlob(arquivoFinal);
                 stream.getTracks().forEach(track => track.stop());
             };
-
             recorder.start();
             setGravando(true);
         } catch (erro) {
             toaster.create({ title: "Microfone bloqueado", description: "Permita o uso do microfone para gravar.", type: "error" });
         }
     };
-
     const pararGravacao = () => {
         if (mediaRecorderRef.current && gravando) {
             mediaRecorderRef.current.stop();
