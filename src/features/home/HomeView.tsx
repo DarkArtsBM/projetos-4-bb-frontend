@@ -1,116 +1,120 @@
 "use client";
 
 import {
-    Container,
+    Box,
     VStack,
     Heading,
     Text,
+    SimpleGrid,
+    Icon,
+    Flex,
+    Container,
     Button,
-    Box,
-    SimpleGrid
+    HStack,
+    Circle
 } from "@chakra-ui/react";
-import { useRouter } from "next/navigation";
-
+import {
+    FiLock,
+    FiCreditCard,
+    FiSmartphone,
+    FiDollarSign,
+    FiArrowRight,
+    FiHelpCircle
+} from "react-icons/fi";
+import { useRouter } from "next/navigation"; // Para navegação entre páginas
+import { TutorialCard } from "@/features/media/components/TutorialCard";
+import { useMediaView } from "@/features/media/hooks/useMediaView";
+import Link from "next/link";
 
 export function HomeView() {
     const router = useRouter();
+    const { estados, acoes } = useMediaView(); // Acedemos aos estados e ações globais
+
+    // Função para lidar com o clique no vídeo sugerido
+    const handleVideoClick = (tutorialPergunta: string) => {
+        acoes.setProcess(tutorialPergunta); // Define o vídeo que deve abrir
+        router.push("/media"); // Navega para a página de visualização
+    };
+
+    const categorias = [
+        { nome: "Senhas", icon: FiLock, color: "blue.500", bg: "blue.50" },
+        { nome: "Cartões", icon: FiCreditCard, color: "orange.500", bg: "orange.50" },
+        { nome: "App BB", icon: FiSmartphone, color: "green.500", bg: "green.50" },
+        { nome: "Pix e Pagos", icon: FiDollarSign, color: "teal.500", bg: "teal.50" },
+    ];
 
     return (
-        <Box as="main" bg="gray.50" color="gray.800" minH="100vh">
-
-            {/* SEÇÃO HERO */}
-            <Box bg="blue.800" py={{ base: 16, md: 24 }} color="white">
-                <Container maxW="container.lg">
-                    <VStack gap={6} textAlign="center">
-                        <Heading as="h1" size="3xl" fontWeight="black" letterSpacing="tight">
-                            Inclusão Financeira para Todos
-                        </Heading>
-                        <Text fontSize="xl" maxW="2xl" opacity={0.9}>
-                            A primeira plataforma de tutoriais bancários narrados por membros da
-                            sua própria comunidade, nos seus idiomas nativos.
-                        </Text>
-                        <Button
-                            size={{base:"xl",md:"lg"}}
-                            bg="white"
-                            color="blue.800"
-                            fontWeight="bold"
-                            _hover={{ bg: "blue.50", transform: "scale(1.05)" }}
-                            onClick={() => router.push("/media")}
-                            px={10}
-                            mt={4}
-                            shadow="xl"
-                        >
-                            Acessar Tutoriais
-                        </Button>
-                    </VStack>
+        <Box bg="white" minH="calc(100vh - 64px)">
+            {/* 1. HERO SECTION */}
+            <Box bg="brand.500" pt={12} pb={24} px={4}>
+                <Container maxW="container.lg" textAlign="center">
+                    <Heading size="2xl" color="blue.900" fontWeight="900" letterSpacing="tighter">
+                        Como podemos ajudar?
+                    </Heading>
                 </Container>
             </Box>
 
-            {/* SEÇÃO OBJETIVOS */}
-            <Container maxW="container.xl" py={20}>
-                <SimpleGrid columns={{ base: 1, md: 3 }} gap={10}>
-
-                    {/* CARD REFATORADO */}
-                    <VStack
-                        align="start"
-                        p={8}
-                        borderRadius="2xl"
-                        bg="white"
-                        border="1px solid"
-                        borderColor="gray.200"
-                        shadow="md"
-                        _hover={{ shadow: "lg", transform: "translateY(-4px)" }}
-                        transition="all 0.3s"
-                    >
-                        <Heading size="md" color="blue.600" mb={2}>Acessibilidade</Heading>
-                        <Text color="gray.600">
-                            Simplificamos termos bancários complexos para que ninguém fique de fora da economia digital, independente da sua língua materna.
-                        </Text>
-                    </VStack>
-
-                    <VStack
-                        align="start" p={8} borderRadius="2xl" bg="white"
-                        border="1px solid" borderColor="gray.200" shadow="md"
-                        _hover={{ shadow: "lg", transform: "translateY(-4px)" }} transition="all 0.3s"
-                    >
-                        <Heading size="md" color="blue.600" mb={2}>Representatividade</Heading>
-                        <Text color="gray.600">
-                            O conteúdo não é apenas traduzido, é explicado por pessoas da comunidade, garantindo que a cultura e o contexto sejam respeitados.
-                        </Text>
-                    </VStack>
-
-                    <VStack
-                        align="start" p={8} borderRadius="2xl" bg="white"
-                        border="1px solid" borderColor="gray.200" shadow="md"
-                        _hover={{ shadow: "lg", transform: "translateY(-4px)" }} transition="all 0.3s"
-                    >
-                        <Heading size="md" color="blue.600" mb={2}>Colaboração</Heading>
-                        <Text color="gray.600">
-                            Uma plataforma viva onde usuários podem gravar suas próprias explicações e ajudar outros membros a navegar com segurança.
-                        </Text>
-                    </VStack>
-
+            {/* 2. CATEGORIAS MINIMALISTAS */}
+            <Container maxW="container.md" mt="-60px">
+                <SimpleGrid columns={4} gap={4}>
+                    {categorias.map((cat) => (
+                        <VStack key={cat.nome}>
+                            <Circle
+                                size={{ base: "70px", md: "90px" }}
+                                bg="white"
+                                color={cat.color}
+                                shadow="lg"
+                                cursor="pointer"
+                                transition="all 0.3s"
+                                _hover={{ transform: "scale(1.1)", bg: cat.bg }}
+                            >
+                                <Icon as={cat.icon} fontSize={{ base: "28px", md: "34px" }} />
+                            </Circle>
+                        </VStack>
+                    ))}
                 </SimpleGrid>
             </Container>
 
-            {/* SEÇÃO CHAMADA FINAL */}
-            <Box bg="white" py={16} borderTop="1px solid" borderColor="gray.100">
-                <Container maxW="container.md" textAlign="center">
-                    <VStack gap={6}>
-                        <Heading size="lg" color="blue.900">Como funciona?</Heading>
-                        <Text color="gray.600">
-                            Escolha um serviço (como Pagamento ou Senha), selecione seu idioma e assista ao vídeo explicativo. Se ainda tiver dúvidas, ouça os áudios da comunidade abaixo do vídeo!
-                        </Text>
-                        <Button
-                            colorPalette="blue"
-                            size="lg"
-                            onClick={() => router.push("/media")}
-                        >
-                            Ver na prática
-                        </Button>
+            {/* 3. TUTORIAIS EM DESTAQUE FUNCIONAIS */}
+            <Container maxW="container.lg" py={20}>
+                <Flex justify="space-between" align="end" mb={10} px={2}>
+                    <VStack align="start" gap={1}>
+                        <HStack gap={2} color="blue.600">
+                            <Icon as={FiHelpCircle} />
+                            <Text fontSize="xs" fontWeight="bold" textTransform="uppercase" letterSpacing="widest">
+                                Sugestões
+                            </Text>
+                        </HStack>
+                        <Heading size="lg" color="blue.900" fontWeight="800">
+                            Tutoriais em Destaque
+                        </Heading>
                     </VStack>
-                </Container>
-            </Box>
+
+                    <Link href="/media" passHref>
+                        <Button
+                            variant="ghost"
+                            color="blue.600"
+                            fontWeight="bold"
+                            size="sm"
+                            gap="2" 
+                        >
+                            Ver todos <FiArrowRight />
+                        </Button>
+                    </Link>
+                </Flex>
+
+                {/* Grid de Vídeos Reais com clique funcional */}
+                <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} gap={10}>
+                    {estados.tutoriais.slice(0, 3).map((tut) => (
+                        <Box key={tut.id} transition="0.3s" _hover={{ opacity: 0.9 }}>
+                            <TutorialCard
+                                tutorial={tut}
+                                onClick={() => handleVideoClick(tut.pergunta)} // Chamar a função de navegação
+                            />
+                        </Box>
+                    ))}
+                </SimpleGrid>
+            </Container>
         </Box>
     );
 }

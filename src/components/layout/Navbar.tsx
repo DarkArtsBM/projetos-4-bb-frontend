@@ -1,25 +1,28 @@
 "use client";
 
-import { Box, Flex, Button, HStack } from "@chakra-ui/react";
+import { Box, Flex, Button, HStack, IconButton } from "@chakra-ui/react";
 import Link from "next/link";
 import Image from "next/image";
+import { FiLogOut } from "react-icons/fi";
 import { BotaoAdmin } from "@/features/admin/components/BotaoAdmin";
-import {useAuth} from "@/hooks/useAuth";
+import { useAuth } from "@/hooks/useAuth";
 
 export const Navbar = () => {
-    const {isLoggedIn,handleLogout} = useAuth();
-
+    const { isLoggedIn, handleLogout } = useAuth();
 
     return (
         <Box
             as="nav"
             bg="brand.500"
             w="full"
-            borderBottom="1px"
-            borderColor="whiteAlpha.200"
-            px={{ base: "4", md: "8", lg: "12" }}
-            py={3}
+            borderBottom="1px solid"
+            borderColor="blackAlpha.100"
+            px={{ base: 4, md: 8 }}
+            py={2}
             shadow="sm"
+            position="sticky"
+            top="0"
+            zIndex="1000"
         >
             <Flex
                 w="full"
@@ -28,70 +31,86 @@ export const Navbar = () => {
                 maxW="1440px"
                 mx="auto"
             >
+                {/* LADO ESQUERDO: LOGO E TÍTULO FAQ BB */}
+                <HStack gap={4}>
+                    <Link href="/">
+                        <Box position="relative" width={{ base: "120px", md: "160px" }} height="40px">
+                            <Image
+                                src="/bb-logo.png"
+                                alt="Logo do Banco do Brasil"
+                                fill
+                                style={{ objectFit: "contain" }}
+                                priority
+                            />
+                        </Box>
+                    </Link>
+                </HStack>
 
-                <Link href="/">
-                    <Box
-                        position="relative"
-                        width={{ base: "140px", md: "255px" }}
-                        height={{ base: "40px", md: "68px" }}
-                    >
-                        <Image
-                            src="/bb-logo.png"
-                            alt="Logo do Banco do Brasil"
-                            fill
-                            style={{ objectFit: "contain" }}
-                            priority
-                        />
-                    </Box>
-                </Link>
-
-
+                {/* LADO DIREITO: ADMIN E LOGOUT */}
                 <HStack gap={{ base: 2, md: 4 }}>
                     {isLoggedIn ? (
+                        <HStack gap={3}>
+                            <Box
+                                css={{
+                                    "& button": {
+                                        borderRadius: "full",
+                                        height: "32px",
+                                        fontSize: "xs",
+                                        fontWeight: "bold",
+                                        px: 4,
+                                        bg: "whiteAlpha.900",
+                                        color: "purple.600",
+                                        border: "1px solid",
+                                        borderColor: "purple.200",
+                                        cursor: "pointer",
+                                        _hover: { bg: "white", shadow: "sm" }
+                                    }
+                                }}
+                            >
+                                <BotaoAdmin />
+                            </Box>
 
-                        <>
-                        <BotaoAdmin />
-                        <Button
-                            onClick={handleLogout}
-                            size={{ base: "xs", md: "sm" }}
-                            variant="solid"
-                            colorScheme="red" // Cor de destaque para sair
-                            bg="red.500"
-                            color="white"
-                            _hover={{ bg: "red.600" }}
-                            fontWeight="bold"
-                        >
-                            Sair
-                        </Button>
-                        </>
+                            {/* BOTÃO SAIR  */}
+                            <IconButton
+                                aria-label="Sair"
+                                variant="ghost"
+                                color="blue.900"
+                                size="sm"
+                                onClick={handleLogout}
+                                borderRadius="full"
+                                _hover={{ bg: "blackAlpha.100" }}
+                            >
+                                <FiLogOut size="20px" />
+                            </IconButton>
+                        </HStack>
                     ) : (
-
-                        <>
-                            <Link href="/login" style={{ textDecoration: 'none' }}>
+                        <HStack gap={2}>
+                            <Link href="/login">
                                 <Button
-                                    size={{ base: "xs", md: "sm" }}
-                                    variant="outline"
-                                    color="brand.600"
-                                    bg="white"
-                                    _hover={{ bg: "blue.50" }}
+                                    size="sm"
+                                    variant="ghost"
+                                    color="blue.900"
                                     fontWeight="bold"
+                                    fontSize="xs"
                                 >
                                     Entrar
                                 </Button>
                             </Link>
-                            <Link href="/cadastro" style={{ textDecoration: 'none' }}>
+                            <Link href="/cadastro">
                                 <Button
-                                    size={{ base: "xs", md: "sm" }}
-                                    variant="outline"
-                                    color="brand.600"
-                                    bg="white"
-                                    _hover={{ bg: "blue.50" }}
+                                    size="sm"
+                                    bg="blue.600"
+                                    color="white"
+                                    borderRadius="full"
+                                    px={5}
+                                    _hover={{ bg: "blue.700" }}
                                     fontWeight="bold"
+                                    fontSize="xs"
                                 >
-                                    Cadastre-se
+                                    Cadastrar
                                 </Button>
                             </Link>
-                        </>
+                        </HStack>
                     )}
                 </HStack>
             </Flex>

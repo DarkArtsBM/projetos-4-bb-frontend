@@ -26,6 +26,7 @@ const frankRuhl = Frank_Ruhl_Libre({
 export const metadata: Metadata = {
     title: "FAQ-BB",
     description: "FAQ do BB focado em Acessibilidade",
+    manifest: "/manifest.json",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -37,7 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
         <body>
         <Provider>
-            <Flex direction="column" minH="100vh"> {/* Garante que o footer fique no rodapé */}
+            <Flex direction="column" minH="100vh">
                 <Navbar />
                 <Box as="main" flex="1">
                     {children}
