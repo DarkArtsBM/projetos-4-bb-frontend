@@ -1,7 +1,8 @@
-import { Box, VStack, Text } from "@chakra-ui/react";
-import { NativeSelect } from "@chakra-ui/react";
-import {PainelFiltrosProps} from "@/types/types";
+"use client";
 
+import { Box, VStack, Text, Button, Flex, HStack, IconButton } from "@chakra-ui/react";
+import { FiSliders, FiFileText } from "react-icons/fi";
+import { PainelFiltrosProps } from "@/types/types";
 
 export function PainelFiltros({
                                   idiomas,
@@ -14,54 +15,91 @@ export function PainelFiltros({
 
     return (
         <Box
-            w="full" bg="blue.50" p={6} borderRadius="2xl"
-            border="1px solid" borderColor="blue.100"
-            position={{ md: "sticky" }} top="20px"
+            w="full" bg="white" p={{ base: 4, md: 6 }} borderRadius="2xl"
+            border="1px solid" borderColor="gray.100"
+            position={{ md: "sticky" }} top="20px" shadow="sm"
+            css={{
+                '&::-webkit-scrollbar': { display: 'none' },
+                msOverflowStyle: 'none',
+                scrollbarWidth: 'none'
+            }}
         >
             <VStack align="start" gap={6}>
-
-                {/* SELECT DE IDIOMA */}
+                {/* FILTRO DE IDIOMA EM CARROSSEL (ESTILO YOUTUBE) */}
                 <Box w="full">
-                    <Text fontWeight="bold" mb={2} fontSize="sm" color="black">Língua:</Text>
-                    <NativeSelect.Root size="sm">
-                        <NativeSelect.Field
-                            value={idiomaSelecionado || ""}
-                            onChange={(e) => aoMudarIdioma(e.target.value)}
-                            bg="white" color="black" borderColor="gray.300"
+                    <HStack
+                        w="full"
+                        gap={2}
+                        overflowX="auto"
+                        pb={2}
+                        css={{
+                            '&::-webkit-scrollbar': { display: 'none' }, // Esconde a barra de scroll
+                            '-ms-overflow-style': 'none',
+                            'scrollbar-width': 'none'
+                        }}
+                    >
+                        {/* ÍCONE DE FILTRO FIXO (OPCIONAL) */}
+                        <IconButton
+                            aria-label="Filtros"
+                            variant="subtle"
+                            colorPalette="gray"
+                            borderRadius="lg"
+                            size="sm"
+                            flexShrink={0} // Impede que o ícone esmague
                         >
-                            <option value="" disabled style={{ backgroundColor: 'white', color: 'black' }}>
-                                Escolha a língua
-                            </option>
-                            {idiomas.map((lang) => (
-                                <option key={lang} value={lang} style={{ backgroundColor: 'white', color: 'black' }}>
-                                    {lang}
-                                </option>
-                            ))}
-                        </NativeSelect.Field>
-                        <NativeSelect.Indicator color="black" />
-                    </NativeSelect.Root>
+                            <FiSliders />
+                        </IconButton>
+
+                        {/* BOTÃO "TODOS" OU LISTA DE IDIOMAS */}
+                        {idiomas.map((lang) => (
+                            <Button
+                                key={lang}
+                                size="sm"
+                                flexShrink={0} // IMPORTANTE: Mantém o tamanho do botão no scroll
+                                borderRadius="full" // Formato de pílula igual da imagem
+                                variant={idiomaSelecionado === lang ? "solid" : "subtle"}
+                                colorPalette={idiomaSelecionado === lang ? "blue" : "gray"}
+                                onClick={() => aoMudarIdioma(lang)}
+                                px={4}
+                                fontWeight="medium"
+                            >
+                                {lang}
+                            </Button>
+                        ))}
+                    </HStack>
                 </Box>
 
-                {/* SELECT DE PROCESSO */}
-                <Box w="full" mt={4}>
-                    <Text fontWeight="bold" mb={2} fontSize="sm" color="black">Processo:</Text>
-                    <NativeSelect.Root size="sm">
-                        <NativeSelect.Field
-                            value={processoSelecionado || ""}
-                            onChange={(e) => aoMudarProcesso(e.target.value)}
-                            bg="white" color="black" borderColor="gray.300"
-                        >
-                            <option value="" disabled style={{ backgroundColor: 'white', color: 'black' }}>
-                                Escolha o processo
-                            </option>
-                            {processos.map((proc) => (
-                                <option key={proc} value={proc} style={{ backgroundColor: 'white', color: 'black' }}>
-                                    {proc}
-                                </option>
-                            ))}
-                        </NativeSelect.Field>
-                        <NativeSelect.Indicator color="black" />
-                    </NativeSelect.Root>
+                {/* FILTRO DE PROCESSO (LISTA VERTICAL PARA MOBILE) */}
+                <Box w="full">
+                    <Flex align="center" gap={2} mb={3} px={1}>
+                        <FiFileText color="gray" />
+                        <Text fontWeight="bold" fontSize="xs" color="gray.500" textTransform="uppercase">
+                            Selecione o Tutorial:
+                        </Text>
+                    </Flex>
+
+                    <VStack align="stretch" gap={2}>
+                        {processos.map((proc) => (
+                            <Button
+                                key={proc}
+                                size="lg"
+                                justifyContent="start"
+                                variant={processoSelecionado === proc ? "solid" : "ghost"}
+                                colorPalette="blue"
+                                onClick={() => aoMudarProcesso(proc)}
+                                px={4}
+                                borderRadius="xl"
+                                whiteSpace="normal"
+                                textAlign="left"
+                                height="auto"
+                                py={4}
+                                border="1px solid"
+                                borderColor={processoSelecionado === proc ? "blue.500" : "gray.50"}
+                            >
+                                {proc}
+                            </Button>
+                        ))}
+                    </VStack>
                 </Box>
 
             </VStack>
