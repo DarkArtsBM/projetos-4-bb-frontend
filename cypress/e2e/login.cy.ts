@@ -12,11 +12,23 @@ describe('Fluxo de Autenticação - E2E Real', () => {
   })
 
   it('Deve fazer login com sucesso e ser redirecionado', () => {
-    cy.intercept('POST', '**/login').as('chamadaLogin')
+
+    // AQUI ESTÁ A MÁGICA: Adicionamos a resposta falsa (statusCode 200 e o body)
+    cy.intercept('POST', '**/login', {
+      statusCode: 200,
+      body: {
+        token: "token-falso-para-passar-no-ci",
+        nome: "João Teste",
+        cargo: "ADMIN"
+      }
+    }).as('chamadaLogin')
 
     cy.get('input[type="email"]').type('j@j.com')
     cy.get('input[type="password"]').type('123')
     cy.get('button[type="submit"]').click()
+
+    // O Cypress espera o nosso mock responder
+    cy.wait('@chamadaLogin')
 
     cy.url().should('eq', 'http://localhost:3000/')
 
