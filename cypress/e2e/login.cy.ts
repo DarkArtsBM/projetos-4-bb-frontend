@@ -26,7 +26,6 @@ describe('Fluxo de Autenticação - E2E Real', () => {
     cy.get('input[type="password"]').type('123')
     cy.get('button[type="submit"]').click()
 
-    // O Cypress espera o nosso mock responder
     cy.wait('@chamadaLogin')
 
     cy.url().should('eq', 'http://localhost:3000/')
