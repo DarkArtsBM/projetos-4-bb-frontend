@@ -21,19 +21,18 @@ import {
     FiArrowRight,
     FiHelpCircle
 } from "react-icons/fi";
-import { useRouter } from "next/navigation"; // Para navegação entre páginas
+import { useRouter } from "next/navigation";
 import { TutorialCard } from "@/features/media/components/TutorialCard";
 import { useMediaView } from "@/features/media/hooks/useMediaView";
 import Link from "next/link";
 
 export function HomeView() {
     const router = useRouter();
-    const { estados, acoes } = useMediaView(); // Acedemos aos estados e ações globais
+    const { estados, acoes } = useMediaView();
 
-    // Função para lidar com o clique no vídeo sugerido
     const handleVideoClick = (tutorialPergunta: string) => {
-        acoes.setProcess(tutorialPergunta); // Define o vídeo que deve abrir
-        router.push("/media"); // Navega para a página de visualização
+        acoes.setProcess(tutorialPergunta);
+        router.push("/media");
     };
 
     const categorias = [
@@ -96,7 +95,7 @@ export function HomeView() {
                             color="blue.600"
                             fontWeight="bold"
                             size="sm"
-                            gap="2" 
+                            gap="2"
                         >
                             Ver todos <FiArrowRight />
                         </Button>
@@ -109,7 +108,7 @@ export function HomeView() {
                         <Box key={tut.id} transition="0.3s" _hover={{ opacity: 0.9 }}>
                             <TutorialCard
                                 tutorial={tut}
-                                onClick={() => handleVideoClick(tut.pergunta)} // Chamar a função de navegação
+                                onClick={() => handleVideoClick(tut.pergunta)}
                             />
                         </Box>
                     ))}
