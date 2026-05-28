@@ -17,7 +17,7 @@ export const Navbar = () => {
             w="full"
             borderBottom="1px solid"
             borderColor="blackAlpha.100"
-            px={{ base: 4, md: 8 }}
+            px={{ base: 4, md: 8, "2xl": 12 }}
             py={2}
             shadow="sm"
             position="sticky"
@@ -28,8 +28,6 @@ export const Navbar = () => {
                 w="full"
                 alignItems="center"
                 justifyContent="space-between"
-                maxW="1440px"
-                mx="auto"
             >
                 {/* LADO ESQUERDO: LOGO E TÍTULO FAQ BB */}
                 <HStack gap={4}>
@@ -70,7 +68,7 @@ export const Navbar = () => {
                                 <BotaoAdmin />
                             </Box>
 
-                            {/* BOTÃO SAIR  */}
+                            {/* BOTÃO SAIR */}
                             <IconButton
                                 aria-label="Sair"
                                 variant="ghost"
