@@ -1,0 +1,36 @@
+name: Front-end CI (Next.js & Cypress)
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar o código do Front-end
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Instalar Dependências
+        run: npm install
+
+
+      - name: Testes E2E com Cypress
+        uses: cypress-io/github-action@v6
+        with:
+          start: npm run dev
+          wait-on: 'http://localhost:3000'
+        env:
+
+          CYPRESS_defaultCommandTimeout: 10000
+
+          NEXT_PUBLIC_API_URL: "https://faq-backend.nicesmoke-fcaf77d3.brazilsouth.azurecontainerapps.io"
