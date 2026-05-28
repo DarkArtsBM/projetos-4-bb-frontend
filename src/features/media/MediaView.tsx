@@ -11,7 +11,7 @@ import {
     Flex,
     IconButton
 } from "@chakra-ui/react";
-import { FiArrowLeft } from "react-icons/fi";
+import { FiArrowLeft, FiSliders } from "react-icons/fi";
 
 import { TutorialCard } from "./components/TutorialCard";
 import { VideoPlayer } from "./components/VideoPlayer";
@@ -24,10 +24,11 @@ import { Tutorial } from "@/types/types";
 export function MediaView() {
     const { estados, acoes, configs } = useMediaView();
 
-    // --- VISÃO 1: DETALHES  ---
+    // --- VISÃO 1: DETALHES (Vídeo Aberto) ---
     if (estados.selectProcess) {
         return (
             <Box bg="white" minH="calc(100vh - 70px)">
+                {/* NAVBAR INTERNA DO VÍDEO */}
                 <Flex
                     h="56px"
                     bg="gray.50"
@@ -40,11 +41,10 @@ export function MediaView() {
                     top="0"
                     zIndex="110"
                 >
-                    {/* BOTÃO VOLTAR */}
                     <IconButton
                         aria-label="Voltar"
                         variant="ghost"
-                        color="blue.900" // Azul do Banco do Brasil
+                        color="blue.900"
                         onClick={() => acoes.setProcess("")}
                         borderRadius="full"
                     >
@@ -56,19 +56,41 @@ export function MediaView() {
                     </Text>
                 </Flex>
 
-                <VStack p={4} gap={6} w="full" maxW="md" mx="auto" mt={4}>
+                {/* CONTEÚDO DA PÁGINA */}
+                <VStack p={4} gap={5} w="full" maxW="md" mx="auto" mt={2}>
+
+                    {/* FILTRO DE IDIOMAS  */}
+                    <HStack
+                        w="full"
+                        overflowX="auto"
+                        pb={1}
+                        css={{
+                            scrollbarWidth: "none",
+                            "&::-webkit-scrollbar": { display: "none" }
+                        }}
+                    >
+                        {configs.idiomas.map((lang) => (
+                            <Button
+                                key={lang}
+                                size="sm"
+                                borderRadius="full" // Formato pílula
+                                flexShrink={0}
+                                variant={estados.selectedLanguage === lang ? "solid" : "subtle"}
+                                colorPalette={estados.selectedLanguage === lang ? "blue" : "gray"}
+                                onClick={() => acoes.setLanguage(lang)}
+                                px={4}
+                                fontWeight="medium"
+                            >
+                                {lang}
+                            </Button>
+                        ))}
+                    </HStack>
+
+                    {/* REPRODUTOR DO VÍDEO */}
                     <VideoPlayer urlYoutube={estados.conteudoAtual?.youtubeUrl} />
 
-                    {/* Card de interação:  */}
-                    <Box
-                        w="full"
-                        bg="white"
-                        borderRadius="2xl"
-                        p={5}
-                        borderWidth="1px"
-                        borderColor="gray.200"
-                        shadow="sm"
-                    >
+                    {/* SEÇÃO DE INTERAÇÃO DA COMUNIDADE */}
+                    <Box w="full" bg="white" borderRadius="2xl" p={5} borderWidth="1px" borderColor="gray.200" shadow="sm">
                         <VStack align="stretch" gap={6}>
                             {estados.conteudoAtual && (
                                 <GravadorAudio
@@ -89,7 +111,7 @@ export function MediaView() {
         );
     }
 
-    // --- VISÃO 2: GALERIA (Grid principal responsiva) ---
+    // --- VISÃO 2: GALERIA GERAL ---
     return (
         <Box bg="white" minH="calc(100vh - 70px)">
             <VStack align="start" p={{ base: 4, md: 6 }} gap={6}>
@@ -98,7 +120,7 @@ export function MediaView() {
                     Vídeos em Alta - {estados.selectedLanguage || "Português"}
                 </Heading>
 
-                {/* Filtros de Idioma  */}
+                {/* Filtros de Idioma da Galeria */}
                 <HStack
                     w="full"
                     overflowX="auto"
@@ -108,11 +130,15 @@ export function MediaView() {
                         "&::-webkit-scrollbar": { display: "none" }
                     }}
                 >
+                    <IconButton aria-label="Filtros" variant="subtle" colorPalette="gray" borderRadius="md" size="sm" flexShrink={0}>
+                        <FiSliders />
+                    </IconButton>
                     <Button
                         size="sm"
                         borderRadius="md"
-                        bg="gray.100"
-                        color="black"
+                        variant={!estados.selectedLanguage ? "solid" : "subtle"}
+                        colorPalette={!estados.selectedLanguage ? "blue" : "gray"}
+                        onClick={() => acoes.setLanguage("")}
                         _hover={{ bg: "gray.200" }}
                     >
                         Explorar
@@ -132,7 +158,6 @@ export function MediaView() {
                     ))}
                 </HStack>
 
-                {/* Grid Responsiva: 1 coluna no mobile, até 4 no desktop */}
                 <SimpleGrid
                     columns={{ base: 1, sm: 2, md: 3, lg: 4 }}
                     gap={{ base: 6, md: 8 }}
