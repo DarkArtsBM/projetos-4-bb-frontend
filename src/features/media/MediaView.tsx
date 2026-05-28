@@ -1,153 +1,64 @@
 "use client";
 
-import {
-    Box,
-    SimpleGrid,
-    VStack,
-    Text,
-    HStack,
-    Heading,
-    Button,
-    Flex,
-    IconButton
-} from "@chakra-ui/react";
-import { FiArrowLeft } from "react-icons/fi";
-
-import { TutorialCard } from "./components/TutorialCard";
-import { VideoPlayer } from "./components/VideoPlayer";
-import { GravadorAudio } from "./components/GravadorAudio";
-import { ListaAudios } from "./components/ListaAudios";
-
+import { Box, Container, Flex, VStack, Text } from "@chakra-ui/react";
+import { VideoPlayer } from "@/features/media/components/VideoPlayer";
+import { GravadorAudio } from "@/features/media/components/GravadorAudio";
+import { PainelFiltros } from "@/features/media/components/PainelFiltros";
+import { ListaAudios } from "@/features/media/components/ListaAudios";
 import { useMediaView } from "@/features/media/hooks/useMediaView";
-import { Tutorial } from "@/types/types";
 
 export function MediaView() {
     const { estados, acoes, configs } = useMediaView();
 
-    // --- VISÃO 1: DETALHES  ---
-    if (estados.selectProcess) {
-        return (
-            <Box bg="white" minH="calc(100vh - 70px)">
-                <Flex
-                    h="56px"
-                    bg="gray.50"
-                    px={4}
-                    align="center"
-                    gap={4}
-                    borderBottom="1px solid"
-                    borderColor="gray.200"
-                    position="sticky"
-                    top="0"
-                    zIndex="110"
-                >
-                    {/* BOTÃO VOLTAR */}
-                    <IconButton
-                        aria-label="Voltar"
-                        variant="ghost"
-                        color="blue.900" // Azul do Banco do Brasil
-                        onClick={() => acoes.setProcess("")}
-                        borderRadius="full"
-                    >
-                        <FiArrowLeft size="20px" />
-                    </IconButton>
+    return (
+        <Box bg="white" minH="100vh" color="black">
+            <Container maxW="container.xl" py={10}>
+                <Flex direction={{ base: "column-reverse", md: "row" }} gap={{ base: 8, md: 12 }} align="flex-start">
 
-                    <Text color="black" fontWeight="bold" truncate fontSize="sm">
-                        {estados.selectProcess}
-                    </Text>
-                </Flex>
+                    {/* COLUNA ESQUERDA: O Conteúdo Principal + Audios */}
+                    <Box flex={{ base: "1", md: "5" }} w="full">
 
-                <VStack p={4} gap={6} w="full" maxW="md" mx="auto" mt={4}>
-                    <VideoPlayer urlYoutube={estados.conteudoAtual?.youtubeUrl} />
+                        <VStack align="start" gap={8} w="full">
 
-                    {/* Card de interação:  */}
-                    <Box
-                        w="full"
-                        bg="white"
-                        borderRadius="2xl"
-                        p={5}
-                        borderWidth="1px"
-                        borderColor="gray.200"
-                        shadow="sm"
-                    >
-                        <VStack align="stretch" gap={6}>
-                            {estados.conteudoAtual && (
-                                <GravadorAudio
-                                    tutorialId={estados.conteudoAtual.id}
-                                    idioma={estados.selectedLanguage}
-                                />
-                            )}
-                            <Box maxH="300px" overflowY="auto">
-                                <ListaAudios
-                                    audios={estados.audiosComunidade}
-                                    carregando={estados.carregandoAudios}
-                                />
+                            <VideoPlayer urlYoutube={estados.conteudoAtual?.youtubeUrl} />
+
+                            <Box color="blue.800" mb={2} ml={5} fontWeight="bold">
+                                {estados.selectProcess || "Selecione um processo"}
                             </Box>
+
+                            {estados.conteudoAtual && (
+                                <VStack align="start" w="full" gap={6}>
+                                    <Box p={4} bg="gray.50" borderRadius="lg" w="full">
+                                        <Text color="gray.800" fontWeight="bold" mb={2}>Sobre este processo:</Text>
+                                        <Text color="gray.700">{estados.conteudoAtual.descricao}</Text>
+                                    </Box>
+                                    <GravadorAudio
+                                        tutorialId={estados.conteudoAtual.id}
+                                        idioma={estados.selectedLanguage}
+                                    />
+                                    <ListaAudios
+                                        audios={estados.audiosComunidade}
+                                        carregando={estados.carregandoAudios}
+                                    />
+                                </VStack>
+                            )}
                         </VStack>
                     </Box>
-                </VStack>
-            </Box>
-        );
-    }
 
-    // --- VISÃO 2: GALERIA (Grid principal responsiva) ---
-    return (
-        <Box bg="white" minH="calc(100vh - 70px)">
-            <VStack align="start" p={{ base: 4, md: 6 }} gap={6}>
-
-                <Heading size="md" color="blue.900" fontWeight="black">
-                    Vídeos em Alta - {estados.selectedLanguage || "Português"}
-                </Heading>
-
-                {/* Filtros de Idioma  */}
-                <HStack
-                    w="full"
-                    overflowX="auto"
-                    pb={2}
-                    css={{
-                        scrollbarWidth: "none",
-                        "&::-webkit-scrollbar": { display: "none" }
-                    }}
-                >
-                    <Button
-                        size="sm"
-                        borderRadius="md"
-                        bg="gray.100"
-                        color="black"
-                        _hover={{ bg: "gray.200" }}
-                    >
-                        Explorar
-                    </Button>
-                    {configs.idiomas.map((lang) => (
-                        <Button
-                            key={lang}
-                            size="sm"
-                            borderRadius="md"
-                            flexShrink={0}
-                            variant={estados.selectedLanguage === lang ? "solid" : "subtle"}
-                            colorPalette={estados.selectedLanguage === lang ? "blue" : "gray"}
-                            onClick={() => acoes.setLanguage(lang)}
-                        >
-                            {lang}
-                        </Button>
-                    ))}
-                </HStack>
-
-                {/* Grid Responsiva: 1 coluna no mobile, até 4 no desktop */}
-                <SimpleGrid
-                    columns={{ base: 1, sm: 2, md: 3, lg: 4 }}
-                    gap={{ base: 6, md: 8 }}
-                    w="full"
-                    pt={2}
-                >
-                    {estados.tutoriais.map((tut: Tutorial) => (
-                        <TutorialCard
-                            key={tut.id}
-                            tutorial={tut}
-                            onClick={() => acoes.setProcess(tut.pergunta)}
+                    {/* COLUNA DIREITA: Os Filtros */}
+                    <Box flex={{ base: "1", md: "2" }} w="full">
+                        <PainelFiltros
+                            idiomas={configs.idiomas}
+                            processos={estados.processosNomes}
+                            idiomaSelecionado={estados.selectedLanguage}
+                            processoSelecionado={estados.selectProcess}
+                            aoMudarIdioma={acoes.setLanguage}
+                            aoMudarProcesso={acoes.setProcess}
                         />
-                    ))}
-                </SimpleGrid>
-            </VStack>
+                    </Box>
+
+                </Flex>
+            </Container>
         </Box>
     );
 }
