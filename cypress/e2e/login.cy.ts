@@ -13,7 +13,6 @@ describe('Fluxo de Autenticação - E2E Real', () => {
 
   it('Deve fazer login com sucesso e ser redirecionado', () => {
 
-    // AQUI ESTÁ A MÁGICA: Adicionamos a resposta falsa (statusCode 200 e o body)
     cy.intercept('POST', '**/login', {
       statusCode: 200,
       body: {
