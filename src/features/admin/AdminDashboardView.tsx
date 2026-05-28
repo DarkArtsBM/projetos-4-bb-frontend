@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Button, Input, VStack, HStack, Text, Heading, Flex, SimpleGrid, Badge, NativeSelect, Stack } from "@chakra-ui/react";
+import { Box, Button, Input, VStack, HStack, Text, Heading, Flex, SimpleGrid, Badge, NativeSelect } from "@chakra-ui/react";
 import { FiTrash2, FiCheck, FiX, FiShield, FiVideo, FiHeadphones, FiUsers, FiGlobe } from "react-icons/fi";
 import { useAdminDashboard } from "@/features/admin/hooks/useAdminDashboard";
 import { withAdminAuth } from "@/hooks/withAdminAuth";
@@ -11,133 +11,63 @@ export function AdminDashboardViewRaw() {
     return (
         <Flex minH="100vh" bg="gray.50" direction={{ base: "column", md: "row" }}>
 
-            {/* MENU LATERAL / NAVEGAÇÃO MOBILE */}
-            <Box
-                w={{ base: "full", md: "250px" }}
-                bg="gray.900"
-                p={{ base: 4, md: 6 }}
-                color="white"
-            >
-                {/* Título - Escondido no mobile para ganhar espaço */}
-                <Heading size="md" mb={6} color="blue.300" display={{ base: "none", md: "block" }}>
-                    Painel Admin
-                </Heading>
+            {/* MENU LATERAL */}
+            <VStack w={{ base: "full", md: "250px" }} bg="gray.900" p={6} align="start" gap={4} color="white">
+                <Heading size="md" mb={6} color="blue.300">Painel Admin</Heading>
 
-                {/* VISÃO DESKTOP (VStack - Vertical) */}
-                <VStack display={{ base: "none", md: "flex" }} align="start" gap={4}>
-                    <Button w="full" justifyContent="start" variant={estados.abaAtiva === "TUTORIAIS" ? "solid" : "ghost"} colorPalette="blue" onClick={() => acoes.setAbaAtiva("TUTORIAIS")}>
-                        <FiVideo style={{ marginRight: '8px' }} /> Tutoriais
-                    </Button>
-                    <Button w="full" justifyContent="start" variant={estados.abaAtiva === "MODERACAO" ? "solid" : "ghost"} colorPalette="green" onClick={() => acoes.setAbaAtiva("MODERACAO")}>
-                        <FiHeadphones style={{ marginRight: '8px' }} /> Moderação
-                        {estados.audiosPendentes.length > 0 && <Badge colorPalette="red" ml={2} borderRadius="full">{estados.audiosPendentes.length}</Badge>}
-                    </Button>
-                    <Button w="full" justifyContent="start" variant={estados.abaAtiva === "USUARIOS" ? "solid" : "ghost"} colorPalette="purple" onClick={() => acoes.setAbaAtiva("USUARIOS")}>
-                        <FiUsers style={{ marginRight: '8px' }} /> Usuários
-                    </Button>
-                    <Button w="full" justifyContent="start" variant={estados.abaAtiva === "IDIOMAS" ? "solid" : "ghost"} colorPalette="orange" onClick={() => acoes.setAbaAtiva("IDIOMAS")}>
-                        <FiGlobe style={{ marginRight: '8px' }} /> Idiomas
-                    </Button>
-                </VStack>
+                <Button w="full" justifyContent="start" variant={estados.abaAtiva === "TUTORIAIS" ? "solid" : "ghost"} colorPalette="blue" onClick={() => acoes.setAbaAtiva("TUTORIAIS")}>
+                    <FiVideo style={{ marginRight: '8px' }} /> Tutoriais
+                </Button>
 
-                {/* VISÃO MOBILE (HStack - Scroll Horizontal) */}
-                <HStack
-                    display={{ base: "flex", md: "none" }}
-                    overflowX="auto"
-                    gap={2}
-                    pb={2}
-                    css={{ '&::-webkit-scrollbar': { display: 'none' } }}
-                >
-                    <Button size="sm" flexShrink={0} variant={estados.abaAtiva === "TUTORIAIS" ? "solid" : "outline"} colorPalette="blue" onClick={() => acoes.setAbaAtiva("TUTORIAIS")}>
-                        Tutoriais
-                    </Button>
-                    <Button size="sm" flexShrink={0} variant={estados.abaAtiva === "MODERACAO" ? "solid" : "outline"} colorPalette="green" onClick={() => acoes.setAbaAtiva("MODERACAO")}>
-                        Moderação {estados.audiosPendentes.length > 0 && `(${estados.audiosPendentes.length})`}
-                    </Button>
-                    <Button size="sm" flexShrink={0} variant={estados.abaAtiva === "USUARIOS" ? "solid" : "outline"} colorPalette="purple" onClick={() => acoes.setAbaAtiva("USUARIOS")}>
-                        Usuários
-                    </Button>
-                    <Button size="sm" flexShrink={0} variant={estados.abaAtiva === "IDIOMAS" ? "solid" : "outline"} colorPalette="orange" onClick={() => acoes.setAbaAtiva("IDIOMAS")}>
-                        Idiomas
-                    </Button>
-                </HStack>
-            </Box>
+                <Button w="full" justifyContent="start" variant={estados.abaAtiva === "MODERACAO" ? "solid" : "ghost"} colorPalette="green" onClick={() => acoes.setAbaAtiva("MODERACAO")}>
+                    <FiHeadphones style={{ marginRight: '8px' }} /> Moderação
+                    {estados.audiosPendentes.length > 0 && <Badge colorPalette="red" ml={2} borderRadius="full">{estados.audiosPendentes.length}</Badge>}
+                </Button>
+
+                <Button w="full" justifyContent="start" variant={estados.abaAtiva === "USUARIOS" ? "solid" : "ghost"} colorPalette="purple" onClick={() => acoes.setAbaAtiva("USUARIOS")}>
+                    <FiUsers style={{ marginRight: '8px' }} /> Usuários
+                </Button>
+
+                {/* BOTÃO DE IDIOMAS */}
+                <Button w="full" justifyContent="start" variant={estados.abaAtiva === "IDIOMAS" ? "solid" : "ghost"} colorPalette="orange" onClick={() => acoes.setAbaAtiva("IDIOMAS")}>
+                    <FiGlobe style={{ marginRight: '8px' }} /> Idiomas
+                </Button>
+            </VStack>
 
             {/* ÁREA DE CONTEÚDO */}
             <Box flex="1" p={8} maxW="1000px" mx="auto">
 
-                {/* ABA 1: TUTORIAIS REFATORADA */}
+                {/* ABA 1: TUTORIAIS */}
                 {estados.abaAtiva === "TUTORIAIS" && (
                     <VStack align="start" gap={8} w="full">
                         <Heading size="lg" color="gray.800">Gerenciar Tutoriais</Heading>
 
-                        {/* FORMULÁRIO DE ADIÇÃO */}
                         <Box p={6} bg="white" shadow="sm" borderRadius="lg" w="full" borderWidth="1px">
                             <Text fontWeight="bold" color="gray.800" mb={4}>Adicionar Novo Processo</Text>
+                            <HStack w="full" gap={4}>
+                                <Input color="gray.800" placeholder="Pergunta (ex: Como acessar o e-mail?)"
+                                       value={estados.form.novaPergunta} onChange={(e) =>
+                                    acoes.setNovaPergunta(e.target.value)} />
 
-                            {/* Mudamos de HStack para Stack para empilhar no mobile (base) e alinhar no desktop (md) */}
-                            <Stack direction={{ base: "column", md: "row" }} w="full" gap={4}>
-                                <Input
-                                    color="black"
-                                    placeholder="Pergunta (ex: Como acessar o e-mail?)"
-                                    value={estados.form.novaPergunta}
-                                    onChange={(e) => acoes.setNovaPergunta(e.target.value)}
-                                />
+                                <Input color="gray.800" placeholder="URL do YouTube"
+                                       value={estados.form.novaUrl} onChange={(e) =>
+                                    acoes.setNovaUrl(e.target.value)} />
 
-                                <Input
-                                    color="black"
-                                    placeholder="URL do YouTube"
-                                    value={estados.form.novaUrl}
-                                    onChange={(e) => acoes.setNovaUrl(e.target.value)}
-                                />
-
-                                <Button
-                                    colorPalette="blue"
-                                    onClick={acoes.criarTutorial}
-                                    loading={estados.form.carregandoForm}
-                                    px={8}
-                                    w={{ base: "full", md: "auto" }} // Botão largo no mobile
-                                >
-                                    Salvar
-                                </Button>
-                            </Stack>
+                                <Button colorPalette="blue" onClick={acoes.criarTutorial} loading={estados.form.carregandoForm}>Salvar</Button>
+                            </HStack>
                         </Box>
 
-                        {/* LISTA DE TUTORIAIS */}
                         <SimpleGrid columns={1} gap={4} w="full">
                             {estados.tutoriais.map(tut => (
-                                <Flex
-                                    key={tut.id}
-                                    color="gray.800"
-                                    p={4}
-                                    bg="white"
-                                    shadow="sm"
-                                    borderRadius="md"
-                                    borderWidth="1px"
-                                    justify="space-between"
-                                    align="center"
-                                    direction={{ base: "column", sm: "row" }} // Vira coluna se o espaço acabar
-                                    gap={4}
-                                >
-                                    <Box flex="1" minW="0" w="full">
-                                        <Text fontWeight="bold" color="black" wordBreak="break-word">
-                                            {tut.pergunta}
-                                        </Text>
-                                        <Text fontSize="sm" color="gray.500" truncate>
-                                            {tut.youtubeUrl}
-                                        </Text>
+                                <HStack key={tut.id} color="gray.800" p={4} bg="white" shadow="sm" borderRadius="md" borderWidth="1px" justify="space-between">
+                                    <Box>
+                                        <Text fontWeight="bold">{tut.pergunta}</Text>
+                                        <Text fontSize="sm" color="gray.500">{tut.youtubeUrl}</Text>
                                     </Box>
-
-                                    <Button
-                                        colorPalette="red"
-                                        variant="ghost"
-                                        size="sm"
-                                        w={{ base: "full", sm: "auto" }}
-                                        onClick={() => acoes.deletarTutorial(tut.id)}
-                                    >
-                                        <FiTrash2 style={{ marginRight: '4px' }} /> Deletar
+                                    <Button colorPalette="red" variant="ghost" onClick={() => acoes.deletarTutorial(tut.id)}>
+                                        <FiTrash2 /> Deletar
                                     </Button>
-                                </Flex>
+                                </HStack>
                             ))}
                         </SimpleGrid>
                     </VStack>
@@ -148,37 +78,38 @@ export function AdminDashboardViewRaw() {
                     <VStack align="stretch" gap={12} w="full">
 
                         {/* BARRA DE FILTRO POR IDIOMA */}
-                        <VStack align="start" p={4} bg="blue.50" borderRadius="xl" borderWidth="1px" borderColor="blue.100" gap={3}>
-                            <Text fontWeight="bold" color="blue.800" fontSize="sm">Filtrar por Idioma:</Text>
+                        <Box p={4} bg="blue.50" borderRadius="lg" borderWidth="1px" borderColor="blue.100">
+                            <HStack justify="space-between" w="full">
+                                <Text fontWeight="bold" color="blue.800">Filtrar por Idioma:</Text>
+                                <Box w="200px">
+                                    <NativeSelect.Root size="sm">
+                                        <NativeSelect.Field
+                                            value={estados.filtroIdioma}
+                                            onChange={(e) => acoes.setFiltroIdioma(e.target.value)}
+                                            bg="white"
+                                            color="black"
+                                        >
+                                            {/* AQUI: Forçar fundo branco e letra preta no primeiro item */}
+                                            <option value="" style={{ backgroundColor: "white", color: "black" }}>
+                                                Todos os Idiomas
+                                            </option>
 
-                            {/* Flex wrap permite que os botões "quebrem" para a linha de baixo no celular */}
-                            <Flex wrap="wrap" gap={2}>
-                                <Button
-                                    size="sm"
-                                    borderRadius="full"
-                                    variant={estados.filtroIdioma === "" ? "solid" : "outline"}
-                                    colorPalette="blue"
-                                    onClick={() => acoes.setFiltroIdioma("")}
-                                    _active={{ transform: "scale(0.95)" }}
-                                >
-                                    Todos
-                                </Button>
-
-                                {estados.idiomas.map((lang: any) => (
-                                    <Button
-                                        key={lang.id}
-                                        size="sm"
-                                        borderRadius="full"
-                                        variant={estados.filtroIdioma === lang.nome ? "solid" : "outline"}
-                                        colorPalette="blue"
-                                        onClick={() => acoes.setFiltroIdioma(lang.nome)}
-                                        _active={{ transform: "scale(0.95)" }}
-                                    >
-                                        {lang.nome}
-                                    </Button>
-                                ))}
-                            </Flex>
-                        </VStack>
+                                            {/* AQUI: Forçar fundo branco e letra preta em todos os idiomas que vêm da base de dados */}
+                                            {estados.idiomas.map((lang: any) => (
+                                                <option
+                                                    key={lang.id}
+                                                    value={lang.nome}
+                                                    style={{ backgroundColor: "white", color: "black" }}
+                                                >
+                                                    {lang.nome}
+                                                </option>
+                                            ))}
+                                        </NativeSelect.Field>
+                                        <NativeSelect.Indicator color="black" />
+                                    </NativeSelect.Root>
+                                </Box>
+                            </HStack>
+                        </Box>
 
                         {/* === SEÇÃO 1: FILA DE APROVAÇÃO === */}
                         <VStack align="start" gap={4} w="full">
@@ -271,56 +202,31 @@ export function AdminDashboardViewRaw() {
 
                         <SimpleGrid columns={1} gap={4} w="full">
                             {estados.usuariosComuns.map((user: any) => (
-                                <Flex
-                                    key={user.id}
-                                    p={4}
-                                    bg="white"
-                                    shadow="sm"
-                                    borderRadius="lg"
-                                    borderWidth="1px"
-                                    justify="space-between"
-                                    align="center"
-                                    direction={{ base: "column", sm: "row" }}
-                                    gap={4}
-                                >
-                                    {/* Box de Informações com flex="1" e minW="0" para permitir encolhimento */}
-                                    <Box flex="1" minW="0" w="full">
-                                        <Text fontWeight="bold" color="black" truncate>
+                                <HStack key={user.id} p={4} bg="white" shadow="sm" borderRadius="md" borderWidth="1px" justify="space-between">
+                                    <Box>
+                                        <Text fontWeight="bold" color="black">
                                             {user.nome}
                                             {user.cargo === "ADMIN" && <Badge colorPalette="green" ml={2}>ADMIN</Badge>}
                                         </Text>
-                                        <Text fontSize="sm" color="gray.500" truncate>
-                                            {user.email}
-                                        </Text>
+                                        <Text fontSize="sm" color="gray.500">{user.email}</Text>
                                     </Box>
 
-                                    <HStack gap={2} w={{ base: "full", sm: "auto" }} justify="flex-end">
-                                        {/* Botão de Promover */}
+                                    <HStack gap={2}>
+                                        {/* Botão de Promover (Sempre aparece) */}
                                         {user.cargo !== "ADMIN" && (
-                                            <Button
-                                                colorPalette="purple"
-                                                size="sm"
-                                                w={{ base: "full", sm: "auto" }} // Botão largo no mobile
-                                                onClick={() => acoes.promoverUsuario(user.id, user.nome)}
-                                            >
+                                            <Button colorPalette="purple" size="sm" onClick={() => acoes.promoverUsuario(user.id, user.nome)}>
                                                 <FiShield /> Promover
                                             </Button>
                                         )}
 
-                                        {/* Botão Remover Poderes */}
+                                        {/* Botão Supremo: Só aparece se o alvo for ADMIN E o logado for SUPER_ADMIN */}
                                         {user.cargo === "ADMIN" && estados.cargoLogado === "SUPER_ADMIN" && (
-                                            <Button
-                                                colorPalette="red"
-                                                variant="outline"
-                                                size="sm"
-                                                w={{ base: "full", sm: "auto" }}
-                                                onClick={() => acoes.rebaixarUsuario(user.id, user.nome)}
-                                            >
+                                            <Button colorPalette="red" variant="outline" size="sm" onClick={() => acoes.rebaixarUsuario(user.id, user.nome)}>
                                                 Remover Poderes
                                             </Button>
                                         )}
                                     </HStack>
-                                </Flex>
+                                </HStack>
                             ))}
                         </SimpleGrid>
                     </VStack>
