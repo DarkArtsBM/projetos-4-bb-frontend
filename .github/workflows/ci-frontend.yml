@@ -33,4 +33,4 @@ jobs:
 
           CYPRESS_defaultCommandTimeout: 10000
 
-          NEXT_PUBLIC_API_URL: "https://faq-backend.nicesmoke-fcaf77d3.brazilsouth.azurecontainerapps.io"
+          NEXT_PUBLIC_API_URL: "https://faq.darkartsbm.com"
